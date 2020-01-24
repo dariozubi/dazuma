@@ -4,8 +4,8 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 
-import Layout from '../src/Layout';
-import { getPosts } from '../src/blog/content'
+import Layout from '../../src/Layout';
+import { getPosts } from '../../src/blog/content_en'
 
 export default function Index(props) {
   return (
@@ -15,7 +15,7 @@ export default function Index(props) {
           getPosts().map((a,k)=>{
             return (
               <React.Fragment  key={k}>
-                <ListItem button component="a" href={'blog/'+a.link}>
+                <ListItem button component="a" href={'en/blog/'+a.link}>
                   <ListItemText
                     primary={a.title}
                     secondary={a.tldr}
@@ -32,5 +32,5 @@ export default function Index(props) {
 }
 
 Index.getInitialProps = async function(context) {
-  return require.context('../src/text/blog', true, /\.mdx$/)
+  return require.context('../../src/text/blog_en', true, /\.mdx$/)
 }

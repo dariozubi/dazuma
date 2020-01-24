@@ -8,6 +8,9 @@ import CardActions from '@material-ui/core/CardActions';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
+import Divider from '@material-ui/core/Divider';
+
+
 import hoxa from '../images/hoxa.jpg';
 import intus from '../images/intus.jpg';
 import pame from '../images/pame.jpg';
@@ -23,20 +26,19 @@ const useStyles = makeStyles(theme => ({
 export default function Websites(){
   const classes = useStyles();
 	return(
-		<Grid container justify="space-around">
+		<Grid container spacing={2}>
       <Grid item xs={12}>
-        <Box m={3}>
+        <Box mx={3}>
           <Typography variant="h4" component="h1" gutterBottom>
             Websites
           </Typography>
         </Box>
       </Grid>
-      <Grid item xs={3}>
+      <Grid item lg={3} xs={6}>
         <Card>
           <CardActionArea href="https://intus.tv/" target="_blank" rel="noopener">
             <CardHeader
-              title="Intus.tv"
-              subheader="2017"
+              subheader="dazuma"
             />
             <CardMedia
               className={classes.media}
@@ -44,19 +46,37 @@ export default function Websites(){
               title="Intus"
             />
             <CardContent>
-              <Typography variant="body2" color="textSecondary" component="p">
-                Programador de la p&aacute;gina web de la empresa INTUS. Desarrollada en ThreeJS usando assets generados por los dise&ntilde;adores de la empresa. 
+              <Typography variant="caption" color="textSecondary" component="p">
+                Developed with React and NextJS.
               </Typography>
             </CardContent>
           </CardActionArea>
         </Card>
       </Grid>
-      <Grid item xs={3}>
+      <Grid item lg={3} xs={6}>
+        <Card>
+          <CardActionArea href="https://intus.tv/" target="_blank" rel="noopener">
+            <CardHeader
+              subheader="Intus"
+            />
+            <CardMedia
+              className={classes.media}
+              image={intus}
+              title="Intus"
+            />
+            <CardContent>
+              <Typography variant="caption" color="textSecondary" component="p">
+                INTUS website. Developed with ThreeJS. 
+              </Typography>
+            </CardContent>
+          </CardActionArea>
+        </Card>
+      </Grid>
+      <Grid item lg={3} xs={6}>
         <Card>
           <CardActionArea href="https://hoxa.mx/" target="_blank" rel="noopener">
             <CardHeader
-              title="Hoxa.mx"
-              subheader="2019"
+              subheader="Hoxa"
             />
             <CardMedia
               className={classes.media}
@@ -64,19 +84,18 @@ export default function Websites(){
               title="HOXA"
             />
             <CardContent>
-              <Typography variant="body2" color="textSecondary" component="p">
-                Programador de la p&aacute;gina web de la empresa HOXA. Desarrollada en Wordpress. 
+              <Typography variant="caption" color="textSecondary" component="p">
+                HOXA website. Developed with Wordpress. 
               </Typography>
             </CardContent>
           </CardActionArea>
         </Card>
       </Grid>
-      <Grid item xs={3}>
+      <Grid item lg={3} xs={6}>
         <Card>
           <CardActionArea href="http://pamelazubillaga.com/" target="_blank" rel="noopener">
             <CardHeader
-              title="pamelazubillaga.com"
-              subheader="2019"
+              subheader="pamelazubillaga"
             />
             <CardMedia
               className={classes.media}
@@ -84,12 +103,17 @@ export default function Websites(){
               title="pame"
             />
             <CardContent>
-              <Typography variant="body2" color="textSecondary" component="p">
-                Programador de la p&aacute;gina web de la artista Pamela Zubillaga. Desarrollada en Wordpress. 
+              <Typography variant="caption" color="textSecondary" component="p">
+                Pamela Zubillaga's website. Developed with Wordpress. 
               </Typography>
             </CardContent>
           </CardActionArea>
         </Card>
+      </Grid>
+      <Grid item xs={12}>
+      <Box my={3}>
+        <Divider variant="middle"/>
+        </Box>
       </Grid>
     </Grid>
 	)
