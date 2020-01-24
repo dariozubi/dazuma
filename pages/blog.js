@@ -15,7 +15,7 @@ export default function Index(props) {
           getPosts().map((a,k)=>{
             return (
               <React.Fragment  key={k}>
-                <ListItem button component="a" href={'blog/'+a.link}>
+                <ListItem button component="a" href={'blog/'+a.id}>
                   <ListItemText
                     primary={a.title}
                     secondary={a.tldr}

@@ -28,7 +28,7 @@ function parsePosts (raw_posts) {
       ...p.data,
       createdAt: moment(p.data.date),
       Doc: p.default,
-      link: keys[k].substring(2,keys[k].length-4)
+      id: keys[k].substring(2,keys[k].length-4)
     }))
 }
 

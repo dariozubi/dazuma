@@ -22,13 +22,14 @@ function processPosts (posts) {
 
 function parsePosts (raw_posts) {
   const keys = raw_posts.keys();
+  console.log(keys)
   const posts = keys.map(raw_posts);
   return posts
     .map((p, k) => ({
       ...p.data,
       createdAt: moment(p.data.date),
       Doc: p.default,
-      link: keys[k].substring(2,keys[k].length-4)
+      id: keys[k].substring(2,keys[k].length-4)
     }))
 }
 

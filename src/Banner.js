@@ -40,15 +40,15 @@ export default function Banner({ language }){
       </Box>
       <Divider/>
       <List>
-        <ListItem button component="a" key={1} href="/blog">
+        <ListItem button component="a" key={1} href={(lan === 'es' ? '' : '/en') + '/blog'}>
           <ListItemIcon><ChatIcon/></ListItemIcon>
           <ListItemText primary="Blog" />
         </ListItem>
-        <ListItem button component="a" key={2} href="/portfolio">
+        <ListItem button component="a" key={2} href={(lan === 'es' ? '' : '/en') + '/portfolio'}>
           <ListItemIcon><PermMediaIcon/></ListItemIcon>
           <ListItemText primary={lan === 'es' ? "Trabajos" : 'Works'} />
         </ListItem>
-        <ListItem button component="a" key={3} href="/info">
+        <ListItem button component="a" key={3} href={(lan === 'es' ? '' : '/en') + '/info'}>
           <ListItemIcon><InfoIcon/></ListItemIcon>
           <ListItemText primary="Info" />
         </ListItem>

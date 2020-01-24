@@ -65,7 +65,8 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function BlogTemplate(props) {
+const BlogTemplate = (props) => {
+
   const post = getPost(props.id)
   const Content = post.Doc;
   const classes = useStyles();
@@ -102,9 +103,6 @@ export default function BlogTemplate(props) {
           >
             <MenuIcon />
           </IconButton>
-          <Box className={classes.content}></Box>
-          <Button color="inherit" onClick={handleESClick}>ES</Button>
-          <Button color="inherit" onClick={handleENClick}>EN</Button>
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer}>
@@ -146,9 +144,12 @@ export default function BlogTemplate(props) {
         </Box>
       </main>
     </div>
-  );
-}
+  )
+};
 
 BlogTemplate.getInitialProps = async function(context) {
-  return { id: context.query.id }
-}
+  console.log(context.query.slug)
+  return { id: context.query.slug }
+};
+
+export default BlogTemplate;
