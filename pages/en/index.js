@@ -1,5 +1,5 @@
-import Layout from '../src/Layout';
-import Rectangles from '../src/home/Rectangles';
+import Layout from '../../src/Layout';
+import Rectangles from '../../src/home/Rectangles';
 
 export default function Index() {
   return (

@@ -15,29 +15,36 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
+import ButtonBase from '@material-ui/core/ButtonBase';
 import {useState} from 'react';
 
-import logo from './images/logo.png';
+import logo from './images/logo6.png';
 
 export default function Banner({ language }){
   const [lan, setLan] = useState(language)
   return(
     <div>
-      <Box>
-        <img src={logo} width="100%"/>
-      </Box>
+      <ButtonBase
+        focusRipple
+        href="/"
+      >
+        <Box>
+          <img src={logo} width="100%"/>
+        </Box>
+      </ButtonBase>
 
-      <Box ml={5}>
-        <Typography variant="h4" component="p">
-          Dar&iacute;o Zubillaga Mart&iacute;n
-        </Typography>
-      </Box>
+        <Box ml={5}>
+          <Typography variant="h4" component="p">
+            Dar&iacute;o Zubillaga Mart&iacute;n
+          </Typography>
+        </Box>
 
-      <Box ml={5} mb={3}>
-        <Typography variant="body2" color="textSecondary" component="p">
-          dariozubi@gmail.com 
-        </Typography>
-      </Box>
+        <Box ml={5} mb={3}>
+          <Typography variant="body2" color="textSecondary" component="p">
+            dariozubi@gmail.com 
+          </Typography>
+        </Box>
+      
       <Divider/>
       <List>
         <ListItem button component="a" key={1} href={(lan === 'es' ? '' : '/en') + '/blog'}>

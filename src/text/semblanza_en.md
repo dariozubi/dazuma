@@ -1,7 +1,11 @@
-IN ENGLISH Nací en la Ciudad de México en 1987 y viví ahí hasta el 2017. Desde entonces vivo en Playa del Carmen. Soy hijo de un mexicano y una venezolana con ascendencia española, ambos químicos. Cuento con la nacionalidad mexicana y española. Me gustaría también tener la venezolana pero el país está en crisis desde hace ya unos años.
+## Who am I?
 
-Estudié física en la **Universidad Nacional Autónoma de México (UNAM)**. Me titulé por medio de [tesis](http://132.248.67.65/F/?func=find-b&local_base=TES01&find_code=WRD&request=acrecion+de+campo+fantasma&adjacent=N) en el campo de relatividad numérica bajo la tutela de _Miguel Alcubierre_ en el 2012. Después realicé un posgrado en Ciencias de la Computación en el **Instituto de Investigaciones en Matemáticas Avanzadas y Sistemas (IIMAS)** de la UNAM. Me enfoqué en un modelo de semáforos autoorganizantes trabajando con _Carlos Gershenson_. Terminé siendo el primer titulado del posgrado con el método de publicación de [artículo](https://www.mdpi.com/1099-4300/16/5/2384) en 2014.
+I was born in Mexico City in 1987. I lived there until 2017 and then moved to Playa del Carmen, where I'm living now. My father is mexican and my mother is venezuelan with a spanish heritage. I have both mexican and spanish passports.
 
-Mi vida profesional ha girado alrededor del **desarrollo de software**. He realizado aplicaciones web, consultorías, proyectos multimedia, aplicaciones móviles, videojuegos y actualmente trabajo en el diseño de interfaces de usuario para sistemas médicos de clientes en Estados Unidos.
+I studied physics in the **Universidad Nacional Autónoma de México (UNAM)**. I did my [thesis](http://132.248.67.65/F/?func=find-b&local_base=TES01&find_code=WRD&request=acrecion+de+campo+fantasma&adjacent=N) on numerical relativity with _Miguel Alcubierre_ 	in 2012. Then I did a masters in computer science in the **Instituto de Investigaciones en Matemáticas Avanzadas y Sistemas (IIMAS)** of UNAM. I worked with self-organizing traffic lights with _Carlos Gershenson_ and graduated with a published [article](https://www.mdpi.com/1099-4300/16/5/2384) in 2014.
 
-En mis tiempos libres me gusta realizar deporte al aire libre. De 2010 a 2017 formé parte de la Asociación de Montañismo de la UNAM. Ahí me dediqué principalmente a la espeleología, pero también realicé actividades de escalada en roca y alta montaña. En 2016 comencé a bucear y en 2019 me certifiqué como buzo de cuevas.
+## What do I do?
+
+I've always worked as a **software developer**. I've done consulting, web applications, multimedia proyects, mobile apps and videogames. I'm currently working in the design of user interfaces for medical systems in the US.
+
+In my free time I like outdoors. I was part of the Mountaineering Association of UNAM from 2010 to 2017. I did mostly spelunking but also enjoyed rock climbing and trekking. In 2016 I started SCUBA diving and in 2019 I got my cave diving certification.

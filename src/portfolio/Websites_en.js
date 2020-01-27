@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
 
-
+import dazuma from '../images/dazuma.jpg';
 import hoxa from '../images/hoxa.jpg';
 import intus from '../images/intus.jpg';
 import pame from '../images/pame.jpg';
@@ -36,14 +36,14 @@ export default function Websites(){
       </Grid>
       <Grid item lg={3} xs={6}>
         <Card>
-          <CardActionArea href="https://intus.tv/" target="_blank" rel="noopener">
+          <CardActionArea href="/en" target="_blank" rel="noopener">
             <CardHeader
               subheader="dazuma"
             />
             <CardMedia
               className={classes.media}
-              image={intus}
-              title="Intus"
+              image={dazuma}
+              title="dazuma"
             />
             <CardContent>
               <Typography variant="caption" color="textSecondary" component="p">

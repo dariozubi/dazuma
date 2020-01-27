@@ -26,7 +26,6 @@ import PermMediaIcon from '@material-ui/icons/PermMedia';
 import BlurOnIcon from '@material-ui/icons/BlurOn';
 
 import Banner from './Banner';
-import logo from './images/logo.png';
 
 import { useRouter } from 'next/router'
 

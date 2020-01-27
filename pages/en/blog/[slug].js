@@ -1,8 +1,9 @@
 import React from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { MDXProvider } from '@mdx-js/tag'
+import { MDXProvider } from '@mdx-js/react'
 
 import AppBar from '@material-ui/core/AppBar';
+import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
@@ -62,7 +63,11 @@ const useStyles = makeStyles(theme => ({
   },
   content: {
     flexGrow: 1,
-  },
+    maxWidth: `calc(100% - ${drawerWidth}px)`,
+    '& pre':{
+      backgroundColor: '#e5e6eb'
+    }
+  }
 }));
 
 const BlogTemplate = (props) => {
@@ -78,18 +83,6 @@ const BlogTemplate = (props) => {
   };
 
   const router = useRouter();
-
-  const handleENClick = (e) => {
-    e.preventDefault()
-    if (router.pathname.substring(1,4) != 'en/')
-      router.push('/en'+router.pathname)
-  }
-
-  const handleESClick = (e) => {
-    e.preventDefault()
-    if (router.pathname.substring(1,4) == 'en/')
-      router.push(router.pathname.substring(3))
-  }
 
   return (
     <div className={classes.root}>
@@ -134,21 +127,20 @@ const BlogTemplate = (props) => {
         </Hidden>
       </nav>
       <main className={classes.content}>
-        <Box mx={3} mt={11}>
+        <Box mx={8} my={12}>
           <Typography variant="h4" component="h1" gutterBottom>
             {post.title}
           </Typography>
           <MDXProvider>
             <Content/>
           </MDXProvider>
-        </Box>
+            </Box>
       </main>
     </div>
   )
 };
 
 BlogTemplate.getInitialProps = async function(context) {
-  console.log(context.query.slug)
   return { id: context.query.slug }
 };
 
