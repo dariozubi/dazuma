@@ -1,5 +1,5 @@
 import Layout from '../src/Layout';
-import Semblanza from '../src/info/Semblanza';
+import Semblanza from "../src/text/semblanza.md"
 
 export default function Index() {
   return (

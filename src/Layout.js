@@ -141,9 +141,16 @@ export default function ResponsiveDrawer(props) {
         </Hidden>
       </nav>
       <main className={classes.content}>
-        <Box mt={9}>
-        {elements}
-        </Box>
+        <Hidden smUp implementation="css">
+          <Box mt={12} mx={4}>
+            {elements}
+          </Box>
+        </Hidden>
+        <Hidden xsDown implementation="css">
+          <Box mt={12} mx={8}>
+            {elements}
+          </Box>
+        </Hidden>
       </main>
     </div>
   );

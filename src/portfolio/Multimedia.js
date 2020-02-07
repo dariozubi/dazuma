@@ -2,17 +2,22 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Vimeo from './Vimeo';
+import { makeStyles } from '@material-ui/core/styles';
+
+const useStyles = makeStyles(theme => ({
+  container: {
+    padding: theme.spacing(3)
+  }
+}));
 
 export default function Multimedia(){
+  const classes = useStyles();
 	return(
-		<Grid container spacing={2}>
+		<Grid container spacing={2} className={classes.container}>
       <Grid item xs={12}>
-        <Box ml={3}>
-          <Typography variant="h4" component="h1" gutterBottom>
-            Multimedia
-          </Typography>
-        </Box>
-
+        <Typography variant="h4" component="h1" gutterBottom>
+          Multimedia
+        </Typography>
       </Grid>
       <Grid item xs={6} lg={3}>
         <Vimeo

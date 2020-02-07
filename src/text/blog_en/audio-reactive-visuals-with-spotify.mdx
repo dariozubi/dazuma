@@ -1,0 +1,66 @@
+export const data = {
+  title: 'Audio-reactive visuals with Spotify',
+  tldr: 'A React and NodeJS app',
+  date: '2020-01-28'
+}
+
+There are many ways to generate audio-reactive visuals. The most common solution is to use a microphone. This can be enough in most cases, but you don't have a lot of parameters to play with. If you have the analysis done beforehand, you can do a lot more. You can create an individual narrative for each song even when the code is live.
+
+I only found something like this: [kaleidosync](https://www.kaleidosync.com/). There are some projects with visuals in limited songs. But nowadays we have all the music in the palm of our hands and we can do better.
+
+The good news is that the hardest part is already done. The [Spotify API](https://developer.spotify.com/documentation/web-api/reference/) has an analysis for all (most?) of its songs. We only need to use it to create something cool.
+
+This project was born as a mod to kaleidosync but in time it grew enough to stand on its own. It's an exercise on **[React](https://reactjs.org/)** and **[ThreeJS](https://threejs.org/)** in the frontend and **[NodeJS](https://nodejs.org/en/download/)** in the backend. I learned a lot of things on the way so I'll share them.
+
+
+**_If you don't know anything about React, ThreeJS or NodeJS I recommend you check them out first. This text assumes you know at least the basics._**
+
+If you already know how to code and don't mind the details you can go to my [Github](https://github.com/dariozubi/spotify-visualizer) to find the whole app.
+
+## React
+
+The base of the app uses [create-react-app (CRA)](https://github.com/facebook/create-react-app). As stated in the page, you need to install NodeJS and run this command to start:
+
+`
+npx create-react-app spotify-visualizer
+`
+I named it `spotify-visualizer` but you can choose any name. The folder with this name has all the basic files for the project. 
+
+All commands that start with `npm` must run from this folder.
+
+By default, CRA creates a service worker for your app. Since we are not going to use it you can delete it. To do that, replace the content of `src/index.js` to:
+
+```
+src/index.js
+import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+
+ReactDOM.render(<App />, document.getElementById('root'));
+```
+
+## API de Spotify
+
+To use Spotify data you need to create an app in its [Dashboard](https://developer.spotify.com/dashboard/) first. Follow the indications and once you created the app add `http://localhost:8001/callback` to the _Redirect URIs_. 
+
+Spotify generates an ID and secret key for the app you created. We are going to save that in a file called `.env` in the base folder. The name is important because a package is going to use it later.
+
+```
+.env
+client_id = 'YOUR_CLIENT_ID'
+client_secret = 'YOUR_CLIENT_SECRET'
+
+# Redirect URI:
+redirect_uri = 'http://localhost:8001/callback'
+
+# No cambiar esto!!
+scope = 'user-read-playback-state'
+access_token = 'DAZUMA_ACCESS_TOKEN'
+refresh_token = 'DAZUMA_REFRESH_TOKEN'
+```
+
+These credentials will help us connect to Spotify. We cannot use them on the client's side for security. Then, we have to change the server to do the authorization process.
+
+
+## ... to be continued

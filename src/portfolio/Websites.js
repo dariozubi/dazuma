@@ -20,19 +20,20 @@ const useStyles = makeStyles(theme => ({
     height: 0,
     paddingTop: '56.25%', // 16:9
   },
+  container: {
+    padding: theme.spacing(3)
+  }
 }));
 
 
 export default function Websites(){
   const classes = useStyles();
 	return(
-		<Grid container spacing={2}>
+		<Grid container spacing={2} className={classes.container}>
       <Grid item xs={12}>
-        <Box mx={3}>
-          <Typography variant="h4" component="h1" gutterBottom>
-            Websites
-          </Typography>
-        </Box>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Websites
+        </Typography>
       </Grid>
       <Grid item lg={3} xs={6}>
         <Card>
@@ -111,8 +112,8 @@ export default function Websites(){
         </Card>
       </Grid>
       <Grid item xs={12}>
-      <Box my={3}>
-        <Divider variant="middle"/>
+        <Box my={3}>
+          <Divider variant="middle"/>
         </Box>
       </Grid>
     </Grid>

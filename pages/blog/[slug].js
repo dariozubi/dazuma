@@ -3,35 +3,19 @@ import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { MDXProvider } from '@mdx-js/react'
 
 import AppBar from '@material-ui/core/AppBar';
-import Grid from '@material-ui/core/Grid';
-import Button from '@material-ui/core/Button';
-import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
-import LinkedInIcon from '@material-ui/icons/LinkedIn';
-import GitHubIcon from '@material-ui/icons/GitHub';
-import ToysIcon from '@material-ui/icons/Toys';
-import HomeIcon from '@material-ui/icons/Home';
-import InfoIcon from '@material-ui/icons/Info';
-import ChatIcon from '@material-ui/icons/Chat';
-import PermMediaIcon from '@material-ui/icons/PermMedia';
-import BlurOnIcon from '@material-ui/icons/BlurOn';
-
-import { findDoc, getPost } from '../../src/blog/content'
-import Banner from '../../src/Banner';
-import logo from '../../src/images/logo.png';
-
 import { useRouter } from 'next/router'
+
+import { getPost } from '../../src/blog/content'
+import Banner from '../../src/Banner';
+import Code from '../../src/Code';
 
 const drawerWidth = 240;
 
@@ -62,13 +46,24 @@ const useStyles = makeStyles(theme => ({
     width: drawerWidth,
   },
   content: {
-    flexGrow: 1,
-    maxWidth: `calc(100% - ${drawerWidth}px)`,
-    '& pre':{
+    [theme.breakpoints.up('sm')]: {
+      width: `calc(100% - ${drawerWidth}px)`
+    },
+    '& code':{
+      backgroundColor: '#e5e6eb'
+    }
+  },
+  nodrawercontent: {
+    width: '100%',
+    '& code':{
       backgroundColor: '#e5e6eb'
     }
   }
 }));
+
+const components ={
+  code: Code
+}
 
 const BlogTemplate = (props) => {
 
@@ -126,16 +121,30 @@ const BlogTemplate = (props) => {
           </Drawer>
         </Hidden>
       </nav>
-      <main className={classes.content}>
-        <Box mx={8} my={12}>
-          <Typography variant="h4" component="h1" gutterBottom>
-            {post.title}
-          </Typography>
-          <MDXProvider>
-            <Content/>
-          </MDXProvider>
-            </Box>
-      </main>
+      <Hidden smUp implementation="css" className={classes.nodrawercontent}>
+        <main>
+          <Box mx={8} my={12}>
+            <Typography variant="h4" component="h1" gutterBottom>
+              {post.title}
+            </Typography>
+            <MDXProvider components={components}>
+              <Content/>
+            </MDXProvider>
+          </Box>
+        </main>
+      </Hidden>
+      <Hidden xsDown implementation="css" className={classes.content}>
+        <main>
+          <Box mx={8} my={12}>
+            <Typography variant="h4" component="h1" gutterBottom>
+              {post.title}
+            </Typography>
+            <MDXProvider components={components}>
+              <Content/>
+            </MDXProvider>
+          </Box>
+        </main>
+      </Hidden>
     </div>
   )
 };
