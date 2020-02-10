@@ -4,7 +4,7 @@ export const data = {
   date: '2020-01-28'
 }
 
-There are many ways to generate audio-reactive visuals. The most common solution is to use a microphone. This can be enough in most cases, but you don't have a lot of parameters to play with. If you have the analysis done beforehand, you can do a lot more. You can create an individual narrative for each song even when the code is live.
+There are many ways to generate audio-reactive visuals. The most common solution is to use a microphone and translate the sound to parameters you can use. Usually, amplitude and frequency are enough to do a lot of things. Yet, if you have the analysis for the whole song done beforehand, you can do a lot more. You can create an individual narrative for each song even when the code is live.
 
 I only found something like this: [kaleidosync](https://www.kaleidosync.com/). There are some projects with visuals in limited songs. But nowadays we have all the music in the palm of our hands and we can do better.
 
@@ -24,11 +24,9 @@ The base of the app uses [create-react-app (CRA)](https://github.com/facebook/cr
 `
 npx create-react-app spotify-visualizer
 `
-I named it `spotify-visualizer` but you can choose any name. The folder with this name has all the basic files for the project. 
+I named it `spotify-visualizer` but you can choose any name. The folder with this name has all the basic files for the project. All commands that start with `npm` must run from this folder.
 
-All commands that start with `npm` must run from this folder.
-
-By default, CRA creates a service worker for your app. Since we are not going to use it you can delete it. To do that, replace the content of `src/index.js` to:
+By default, CRA creates a _service worker_ for your app. Since we are not going to use it you can delete it. To do that, replace the content of `src/index.js` to:
 
 ```
 src/index.js
@@ -62,6 +60,824 @@ refresh_token = 'DAZUMA_REFRESH_TOKEN'
 
 These credentials will help us connect to Spotify. We cannot use them on the client's side for security. Then, we have to change the server to do the authorization process.
 
-## ... to be continued 
+## NodeJS
+
+We have to modify the default CRA server to connect to the API. For that we are going to use some packages that are going to help simplify the process. We use the `--save-dev` flag to install the modules only in the backend:
+
+`
+npm install body-parser cookie-parser express node-env-run npm-run-all --save-dev
+`
+
+You should see the changes in the `package.json` file under `devDependencies`.  
+
+We are going to follow the [authorization flow](https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow) of the API. To do that we are going to add a second server (besides the CRA). First, we are going to change the default scripts of CRA and add a proxy for the second server. Change the `package.json`  file by removing the `scripts` object and replacing it with: 
+
+```
+package.json
+"scripts": {
+    "react": "set PORT=8000 && react-scripts start",
+    "server": "node-env-run server",
+    "start": "run-p server react"
+  },
+"proxy": "http://localhost:8001",
+```
+
+Notice how we also added a `proxy` object pointing to 
+
+In the _start_ `script` we are using the `run-p` command from the `npm-run-all` package to run the CRA server and ours (called _server_) at the same time. Our server also uses the `.env` file (from the previous section) with the `node-env-run` package.
+
+Now is time to create the logic for our server. First, create a folder called `server` with a file called `index.js` and add this:
+
+```
+server/index.js
+const express = require('express');
+const bodyParser = require('body-parser');
+const querystring = require('querystring');
+const cookieParser = require('cookie-parser');
+const request = require('request');
+
+const app = express();
+app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use((req, res, next) => {
+  res.set('Access-Control-Allow-Origin', 'http://localhost:8000');
+  res.set('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
+
+app.use(cookieParser());
+
+app.get('/refresh', (req, res) => {
+  const refresh_token = req.query.token;
+
+  if (!refresh_token) {
+    res.status(400);
+    res.send({ ERROR: 'No token provided.' });
+    return
+  }
+
+  const authOptions = {
+    url: 'https://accounts.spotify.com/api/token',
+    headers: { 'Authorization': 'Basic ' + (new Buffer(process.env.client_id + ':' + process.env.client_secret).toString('base64')) },
+    form: {
+      refresh_token,
+      grant_type: 'refresh_token'
+    },
+    json: true
+  };
+
+  request.post(authOptions, (error, response, body) => {
+    if (!error && response.statusCode === 200) {
+      const access_token = body.access_token
+      res.send({ access_token });
+    } else {
+      res.send({ message: 'The end is near'});
+    };
+  });
+});
+
+app.get('/login', (req, res) => {
+  const auth_id = req.query.auth_id
+  const query = querystring.stringify({
+    response_type: 'code',
+    client_id: process.env.client_id,
+    scope: process.env.scope,
+    redirect_uri: process.env.redirect_uri,
+    state: auth_id
+  });
+
+  res.cookie(process.env.state_key, auth_id);
+  res.redirect('https://accounts.spotify.com/authorize?' + query);
+});
+
+app.get('/callback', (req, res) => {
+  const code = req.query.code || null;
+  
+  const authOptions = {
+    url: 'https://accounts.spotify.com/api/token',
+    form: {
+      code: code,
+      redirect_uri: process.env.redirect_uri,
+      grant_type: 'authorization_code'
+    },
+    headers: {
+      'Authorization': 'Basic ' + (new Buffer(process.env.client_id + ':' + process.env.client_secret).toString('base64'))
+    },
+    json: true
+  };
+  
+  request.post(authOptions, (error, response, body) => {
+    if (!error && res.statusCode === 200) {
+      res.cookie(process.env.access_token, body.access_token);
+      res.cookie(process.env.refresh_token, body.refresh_token);
+      // res.cookie(process.env.refresh_code, code);
+
+      res.redirect('http://localhost:8000/#start');
+    } else {
+      res.redirect('/#' + querystring.stringify({ error: 'invalid_token' }));
+    }
+  })
+})
+
+app.get('/auth', (req, res) => {
+  const auth_id = Math.random().toString(36).slice(5, 11)
+  res.set('Content-Type', 'application/json');
+  res.send(JSON.stringify({ auth_id: Math.random().toString(36).slice(5, 11) }));
+});
+
+app.listen(8001, () =>
+  console.log('Express server is running on localhost:8001')
+);
+```
+
+You can see the details in the code, but the important part is the flow:
+- We start at `http://localhost:8001/login`. The user authenticates with Spotify using its credentials.
+- The user needs to allow our application to use their info.
+- We request Spotify for the access and refresh tokens. We will use these tokens so the user doesn't have to authenticate again.
+- Spotify sends us back to `http://localhost:8001/callback`. We told them in the Dashboard configuration in the second section.
+- We save the tokens in cookies and we can now ask for information to the API.
+- We go to `http://localhost:8000/#start` to start the visuals.
+
+Some of these steps are on the client-side that we'll see in the next section.
+
+## Frontend
+
+Now that the server can connect with the API we are going to change the default React app. Since we are using cookies for the tokens, we need code to read them. Create the folder `/src/components` with a file called `cookie.js` and add this:
+
+```
+src/components/cookie.js
+export function get (sKey) {
+  if (!sKey) { return null; }
+  return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" 
+    + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") 
+    + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
+}
+
+export function set (sKey, sValue, vEnd, sPath, sDomain, bSecure) {
+  if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) { return false; }
+  var sExpires = "";
+  if (vEnd) {
+    switch (vEnd.constructor) {
+      case Number:
+        sExpires = vEnd === Infinity ? "; expires=Fri, 31 Dec 9999 23:59:59 GMT" : "; max-age=" + vEnd;
+        break;
+      case String:
+        sExpires = "; expires=" + vEnd;
+        break;
+      case Date:
+        sExpires = "; expires=" + vEnd.toUTCString();
+        break;
+    }
+  }
+  document.cookie = encodeURIComponent(sKey) + "=" 
+    + encodeURIComponent(sValue) + sExpires + (sDomain ? "; domain=" + sDomain : "") 
+    + (sPath ? "; path=" + sPath : "") + (bSecure ? "; secure" : "");
+  return true;
+}
+
+export function remove (sKey, sPath, sDomain) {
+  if (!this.hasItem(sKey)) { return false; }
+  document.cookie = encodeURIComponent(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" 
+    + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "");
+  return true;
+}
+
+export function has (sKey) {
+  if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) { return false; }
+  return (new RegExp("(?:^|;\\s*)" 
+    + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") 
+    + "\\s*\\=")).test(document.cookie);
+}
+
+export function keys () { 
+  var aKeys = document.cookie.replace(/((?:^|\s*;)[^\=]+)(?=;|$)|^\s*|\s*(?:\=[^;]*)?(?:\1|$)/g, "").split(/\s*(?:\=[^;]*)?;\s*/);
+  for (var nLen = aKeys.length, nIdx = 0; nIdx < nLen; nIdx++) { aKeys[nIdx] = decodeURIComponent(aKeys[nIdx]); }
+  return aKeys;
+}
+```
+
+Then, we create a renderless component to handle the requests. In the folder `/src/components` create a file called `APIHandler.js` with this content:
+
+```
+/src/components/APIHandler.js
+import { Component } from 'react';
+import * as cookie from './cookie';
+
+ export default class ApiHandler extends Component{
+
+  constructor(props){
+    super(props);
+
+    this.state = {
+      track: {},
+      track_analysis: {},
+      track_progress: 0,
+      headers: {},
+      refresh_token: '',
+      last_update: 0,
+      section: -1,
+      tatum: -1
+    }
+
+    this.setActive = this.setActive.bind(this);
+    this.setTrack = this.setTrack.bind(this);
+  }
+
+  componentDidMount() {
+
+    if (window.location.hash === '#start') {
+
+      this.setState({
+        refresh_token: cookie.get('DAZUMA_REFRESH_TOKEN'),
+        headers: new Headers({
+          'Authorization': 'Bearer ' + cookie.get('DAZUMA_ACCESS_TOKEN'),
+          'Accept': 'application/json'
+        })
+      });
+
+      this.ping();
+
+      this.timerId = setInterval(this.updateProgress.bind(this), 50);
+
+    } else {
+
+      this.auth();
+    }
+    
+  };
+
+  componentWillUnmount(){
+    clearInterval(this.timerId);
+    clearTimeout(this.callId);
+  }
+
+  auth () {
+    fetch('http://localhost:8001/auth')
+      .then(res => res.json())
+      .then(res => res.auth_id ? window.location.href = 'http://localhost:8001/login?auth_id=' + res.auth_id : null) 
+      .catch(err => console.log(err))
+  }
+
+  updateProgress(){
+
+    if (this.props.active){
+
+      this.setState((state,props)=>({ 
+        track_progress: state.track_progress + window.performance.now() - state.last_update,
+        last_update: window.performance.now() 
+      }));
+      
+      let tempo = 0;
+      let key = 0;
+      let mode = 0;
+      let loudness = 0;
+      let section = 0;
+      let tatum = 0;
+      let beat = 0;
+      let bar = 0;
+      let segment = 0;
+
+      for (let i=0; i<this.state.track_analysis.sections.length; i++){
+
+        if (this.state.track_progress > this.state.track_analysis.sections[i].start){
+          section = this.state.track_analysis.sections[i].start;
+          tempo = this.state.track_analysis.sections[i].tempo/60*1000/this.state.track_analysis.sections[i].time_signature;
+          key = this.state.track_analysis.sections[i].key;
+          mode = this.state.track_analysis.sections[i].mode;
+          loudness = this.state.track_analysis.sections[i].loudness;
+        }
+
+        else break;
+      }
+
+      for (let i=0; i<this.state.track_analysis.tatums.length; i++){
+        if (this.state.track_progress > this.state.track_analysis.tatums[i].start)
+          tatum = this.state.track_analysis.tatums[i].start;
+        else break;
+      }
+
+      for (let i=0; i<this.state.track_analysis.beats.length; i++){
+        if (this.state.track_progress > this.state.track_analysis.beats[i].start)
+          beat = this.state.track_analysis.beats[i].start;
+        else break;
+      }
+
+      for (let i=0; i<this.state.track_analysis.bars.length; i++){
+        if (this.state.track_progress > this.state.track_analysis.bars[i].start)
+          bar = this.state.track_analysis.bars[i].start;
+        else break;
+      }
+
+      for (let i=0; i<this.state.track_analysis.segments.length; i++){
+        if (this.state.track_progress > this.state.track_analysis.segments[i].start)
+          segment = this.state.track_analysis.segments[i].start;
+        else break;
+      }
+
+      this.setTrack({
+        name: this.state.track.name,
+        tempo: tempo,
+        key: key,
+        mode: mode,
+        loudness: loudness,
+        tempo_pulse: this.state.track_progress % tempo < 100,
+        section_pulse: Math.abs(this.state.track_progress - section) < 500,
+        tatum_pulse: Math.abs(this.state.track_progress - tatum) < 100,
+        beat_pulse: Math.abs(this.state.track_progress - beat) < 100,
+        bar_pulse: Math.abs(this.state.track_progress - bar) < 100,
+        segment_pulse: Math.abs(this.state.track_progress - segment) < 100
+      });
+
+      this.setState({
+        section: section,
+        tatum: tatum
+      });
+    }
+  }
+
+  ping(){
+    this.callId = setTimeout(() => this.getAPIInfo(), 3000);
+  }
+
+  getAPIInfo() {
+
+    const now = window.performance.now();
+
+    const request = new Request('https://api.spotify.com/v1/me/player', {headers: this.state.headers});
+
+    fetch(request)
+      .then(res =>{
+
+        if (res.statusText === "No Content")
+          return res; 
+
+        return res.json();
+
+      })
+      .then(res => {
+
+        if (res.statusText === "No Content"){
+          this.setActive(false);
+          this.setState({ track: "NO TRACK" });
+          return "";
+        }
+
+        if (res.error && res.error.status === 401)
+          return this.getNewToken(); 
+
+        const track = res.item;
+        const playing = res.is_playing;
+        const progress = res.progress_ms + (window.performance.now() - now);
+
+        const song_in_sync = JSON.stringify(this.state.track) === JSON.stringify(track)
+
+        const error = this.state.track_progress - progress;
+
+        if (playing && !this.props.active) {
+
+          if (song_in_sync) {
+
+            this.setActive(true);
+
+            this.setState({ 
+              track_progress: progress,
+              last_update: window.performance.now() 
+            });
+          }
+
+          else
+
+            this.getTrackData({ track, progress })
+        }
+
+        if (!playing && this.props.active) {
+
+          this.setActive(false);
+
+        }
+
+        if (playing && this.props.active && !song_in_sync) {
+
+          this.getTrackData({ track, progress })
+
+        }
+
+        if (playing && this.props.active && song_in_sync && Math.abs(error) > 50) {
+
+          this.setState({ 
+            track_progress: progress,
+            last_update: window.performance.now() 
+          });
+
+        } 
+
+      })
+      .then(this.ping())
+      .catch(err => console.log(err))
+  }
+
+  getTrackData ({ track, progress }) {
+
+    const now = window.performance.now();
+
+    fetch(new Request('https://api.spotify.com/v1/audio-analysis/' + track.id, {headers: this.state.headers}))
+      .then(res => res.json())
+      .then(res =>{
+
+        if (res.error && res.error.status === 401) {
+          return this.getNewToken(); 
+        }
+
+        const rhythms = ['bars', 'beats', 'sections', 'segments', 'tatums'];
+
+        let analysis = res;
+
+        for (let rhythm of rhythms){
+          let item = analysis[rhythm];
+          for (let i=0; i<item.length; i++){
+            analysis[rhythm][i].start *= 1000;
+            analysis[rhythm][i].duration *= 1000;
+          }
+        }
+
+        analysis.track.end_of_fade_in *= 1000;
+        analysis.track.start_of_fade_out *= 1000;
+        analysis.track.duration *= 1000;
+
+        this.setActive(true);
+
+        this.setState({ 
+          track: track,
+          track_analysis: analysis,
+          track_progress: progress + (window.performance.now() - now),
+          last_update: window.performance.now() 
+        });
+
+    })
+    .catch(err => console.log(err))
+  }
+
+  getNewToken () {
+
+    console.warn("Fetching new token");
+
+    if (!this.state.refresh_token) {
+      return window.location.href = ''
+    }
+
+    fetch('http://localhost:8001/refresh?token=' + this.state.refresh_token)
+      .then(res => res.json())
+      .then(res => {
+        this.setState({
+          headers: new Headers({
+            'Authorization': 'Bearer ' + res.access_token,
+            'Accept': 'application/json'
+          })
+        });
+      })
+      .catch(err => console.log(err));
+  }
+
+  setActive(active){
+    this.props.setActive(active);
+  }
+
+  setTrack(track){
+    this.props.setTrack(track);
+  }
+
+  render() {
+    return null;
+  }
+
+}
+```
+First, we check if we have the cookies with the authorization tokens. If not we do the authorization flow. Once we have the tokens we make the request to the API about the track. We do this on the `getTrackData` method. Here is where you can get a lot more info than frequency and amplitude.
+
+> ***Since we connected to Spotify's server we can:***
+> - ***Listen to the music in a Bluetooth stereo***
+> - ***Change the songs on our phone***
+> - ***See some pretty visuals in our computer***
+
+In this case, we are only using rhythm information. But there is more info you [can](https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-analysis/) [use](https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-features/) on each track.
+
+## Visuals
+
+Now to the fun part. We are going to use one of the most popular WebGL libraries: ThreeJS. Since we are using the React libraries is better to use something to connect both. The best way to do it is by using [`react-three-fiber`](https://github.com/react-spring/react-three-fiber). In this example, we are also going to use [`react-spring`](https://www.react-spring.io/) for the animations. Both these libraries are going to be in CRA part of our app so to install them we use:
+
+`
+npm install three react-three-fiber react-spring
+`
+
+We have almost everything we need to create an audio-reactive visual. This example shows a very basic 3D scene. It shows different types of rhythms the API uses by changing the size of each pebble. To use it copy and paste it in a file called `Scene.js` inside the `src/components` folder.
+
+```
+src/components/Scene.js
+import React from 'react';
+import { Canvas, useThree, useFrame } from "react-three-fiber"
+import { useSpring, a } from "react-spring/three"
+
+function Tempo(props) {
+  const { size, viewport } = useThree()
+  const aspect = size.width / viewport.width
+  const [spring, set] = useSpring(() => ({
+    scale: [0.5, 0.5, 0.5],
+    position: props.position,
+    rotation: [0, 0, 0],
+    config: { mass: 5, friction: 50, tension: 100 }
+  }))
+
+  useFrame(() => set({ scale: props.track.tempo_pulse ? [0.9, 0.9, 0.9] : [0.7, 0.7, 0.7] }));
+
+  return (
+    <a.mesh {...spring} castShadow>
+      <dodecahedronBufferGeometry attach="geometry" args={[1.4, 0]} />
+      <meshNormalMaterial attach="material" />
+    </a.mesh>
+  )
+}
+
+function Section(props) {
+
+  const [spring, set] = useSpring(() => ({
+    scale: [0.5, 0.5, 0.5],
+    position: props.position,
+    rotation: [0, 0, 0],
+    config: { mass: 5, friction: 50, tension: 100 }
+  }));
+
+  useFrame(() => set({ scale: props.track.section_pulse ? [0.7, 0.7, 0.7] : [0.5, 0.5, 0.5] }));
+
+  return (
+    <a.mesh {...spring} castShadow>
+      <dodecahedronBufferGeometry attach="geometry" args={[1.4, 0]} />
+      <meshNormalMaterial attach="material" />
+    </a.mesh>
+  )
+}
+
+
+function Tatum(props) {
+
+  const [spring, set] = useSpring(() => ({
+    scale: [0.5, 0.5, 0.5],
+    position: props.position,
+    rotation: [0, 0, 0],
+    config: { mass: 5, friction: 50, tension: 100 }
+  }));
+
+  useFrame(() => set({ scale: props.track.tatum_pulse ? [0.7, 0.7, 0.7] : [0.5, 0.5, 0.5] }));
+
+  return (
+    <a.mesh {...spring} castShadow>
+      <dodecahedronBufferGeometry attach="geometry" args={[1.4, 0]} />
+      <meshNormalMaterial attach="material" />
+    </a.mesh>
+  )
+}
+
+function Beat(props) {
+
+  const [spring, set] = useSpring(() => ({
+    scale: [0.5, 0.5, 0.5],
+    position: props.position,
+    rotation: [0, 0, 0],
+    config: { mass: 5, friction: 50, tension: 100 }
+  }));
+
+  useFrame(() => set({ scale: props.track.beat_pulse ? [0.7, 0.7, 0.7] : [0.5, 0.5, 0.5] }));
+
+  return (
+    <a.mesh {...spring} castShadow>
+      <dodecahedronBufferGeometry attach="geometry" args={[1.4, 0]} />
+      <meshNormalMaterial attach="material" />
+    </a.mesh>
+  )
+}
+
+
+function Segment(props) {
+
+  const [spring, set] = useSpring(() => ({
+    scale: [0.5, 0.5, 0.5],
+    position: props.position,
+    rotation: [0, 0, 0],
+    config: { mass: 5, friction: 50, tension: 100 }
+  }));
+
+  useFrame(() => set({ scale: props.track.segment_pulse ? [0.7, 0.7, 0.7] : [0.5, 0.5, 0.5] }));
+
+  return (
+    <a.mesh {...spring} castShadow>
+      <dodecahedronBufferGeometry attach="geometry" args={[1.4, 0]} />
+      <meshNormalMaterial attach="material" />
+    </a.mesh>
+  )
+}
+
+function Bar(props) {
+
+  const [spring, set] = useSpring(() => ({
+    scale: [0.5, 0.5, 0.5],
+    position: props.position,
+    rotation: [0, 0, 0],
+    config: { mass: 5, friction: 50, tension: 100 }
+  }));
+
+  useFrame(() => set({ scale: props.track.bar_pulse ? [0.7, 0.7, 0.7] : [0.5, 0.5, 0.5] }));
+
+  return (
+    <a.mesh {...spring} castShadow>
+      <dodecahedronBufferGeometry attach="geometry" args={[1.4, 0]} />
+      <meshNormalMaterial attach="material" />
+    </a.mesh>
+  )
+}
+
+export default function DodecahedronScene(props) {
+
+  const track = props.track;
+  const active = props.active;
+
+
+  return (
+    <Canvas 
+      style={{ background: "lightblue" }} 
+      shadowMap 
+      camera={{ position: [0, 0, 5] }}>
+
+        <ambientLight intensity={0.5} />
+
+        <spotLight
+          intensity={0.6}
+          position={[20, 10, 10]}
+          angle={0.2}
+          penumbra={1}
+          shadow-mapSize-width={2048}
+          shadow-mapSize-height={2048}
+          castShadow />
+          
+        <mesh receiveShadow>
+          <planeBufferGeometry attach="geometry" args={[1000, 1000]} />
+          <meshPhongMaterial attach="material" color="#272727" />
+        </mesh>
+
+        <Tempo
+          position={[0, 0, 0]}
+          track={track} />
+
+        <Section
+          position={[2.5, 0, 0]}
+          track={track} />
+
+        <Tatum
+          position={[-2.5, 0, 0]}
+          track={track} />
+
+        <Beat
+          position={[0, 2.5, 0]}
+          track={track} />
+
+        <Segment
+          position={[1.5, -2.5, 0]}
+          track={track} />
+
+        <Bar
+          position={[-1.5, -2.5, 0]}
+          track={track} />
+    </Canvas>
+  )
+}
+```
+
+## Main Script
+
+We have the backend with the track info and the frontend with some visuals. The only thing left is to put them together.
+
+The main script is going to handle the state of the app. We are going to define it with two values: `active` and `track`. Active is going to tell us if there is currently a song playing. Track is going to give us the information about the song.
+
+The `APIHandler` component needs the two callbacks (`setActive` and `setTrack`) to change the state.
+
+The `DodecahedronScene` needs to know the state (`active` and `track`) to make the changes.
+
+The final script `App.js` in the folder `src` looks like:
+
+```
+src/App.js
+import React, { Component } from 'react';
+import APIHandler from './components/APIHandler';
+import Scene from './components/Scene';
+import './App.css';
+
+default class App extends Component{
+
+  constructor(props){
+    super(props);
+
+    this.setActive = this.setActive.bind(this);
+    this.setTrack = this.setTrack.bind(this);
+
+    this.state = {
+      active: false,
+      track: {}
+    };
+  }
+
+  setActive(active){
+    this.setState({ active: active });
+  }
+
+  setTrack(track){
+    this.setState({ track: track })
+  }
+
+  render() {
+
+    const track = this.state.track;
+    const active = this.state.active;
+
+    return(
+      <div className="main">
+
+        <Scene
+          active={active}
+          track={track} />
+
+        <ApiHandler
+          active={active}
+          setActive={this.setActive}
+          setTrack={this.setTrack} />
+      </div>
+    );
+  }
+}
+```
+
+Finally, we need to make some adjustments to the CSS. Change the file `App.css` in the `src` folder to:
+
+```
+src/App.css
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  overflow: hidden;
+}
+
+#root {
+  overflow: auto;
+}
+
+body {
+  position: fixed;
+  overflow: hidden;
+  overscroll-behavior-y: none;
+  font-family: -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, ubuntu, roboto, noto, segoe ui, arial, sans-serif;
+  color: white;
+  -webkit-font-smoothing: antialiased;
+}
+
+.main {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  color: #fff8de;
+  overflow: hidden;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  overflow: hidden;
+}
+```
+
+If everything works, you should be able to:
+- Run `npm run start` in a terminal
+- Go to `http://localhost:8000` in your browser
+- Connect to your Spotify account
+- Play a song in Spotify
+- See some dodecahedrons move
+
+## Now what
+
+This is a very simple example of what you can do. Go and see the [`react-three-fiber`](https://github.com/react-spring/react-three-fiber) docs and build your own visuals. Have fun!
+
+Comments? Write me an [email](mailto:dariozubi@gmail.com).
 
 (this post is also in [Spanish](/blog/visuales-audioreactivos-con-musica-de-spotify))

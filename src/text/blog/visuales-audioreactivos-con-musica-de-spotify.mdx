@@ -4,7 +4,7 @@ export const data = {
 	date: '2020-01-28'
 }
 
-Existen muchas formas de generar visuales audio-reactivos. La solución más común es usar un micrófono. Esto puede ser suficiente en la mayoría de los casos pero, te limitas al número de parámetros con los que puedes jugar. Si tienes el análisis de la canción de antemano puedes generar cosas mucho más complejas. Puedes generar una narrativa única para cada canción aún cuando los visuales están siendo generados en el momento.
+Existen muchas formas de generar visuales audio-reactivos. La solución más común es usar un micrófono y traducir el sonido a parámetros para los visuales. En general usas la amplitud o la frecuencia y ya con eso puedes hacer muchas cosas. Sin embargo, si tienes el análisis de la canción de antemano puedes generar cosas mucho más complejas. Puedes generar una narrativa única para cada canción aún cuando los visuales están siendo generados en el momento.
 
 En internet sólo encontré un proyecto que hace esto: [kaleidosync](https://www.kaleidosync.com/). Hay cosas hechas con música propia o algún número limitado de canciones, pero para estar en la época del streaming creo que nos quedamos cortos.
 
@@ -18,15 +18,13 @@ Si ya te la sabes o sólo quieres ver el código puedes ir a [mi Github](https:/
 
 ## React
 
-La base de la aplicación está hecha con [create-react-app (CRA)](https://github.com/facebook/create-react-app). Como lo indican en su página, solo basta correr en una terminal el siguiente comando y tener instalado NodeJS para empezar:
+La base de la aplicación está hecha con [create-react-app (CRA)](https://github.com/facebook/create-react-app). Como lo indican en su página, solo basta tener instalado NodeJS y correr en una terminal el siguiente comando:
 
 `
 npx create-react-app spotify-visualizer
 `
 
-Yo le puse `spotify-visualizer` de nombre pero puedes usar el que sea. La carpeta con este nombre contiene todos los archivos básicos para el proyecto. 
-
-Todos los comandos que empiecen por `npm` de ahora en adelante tienen que correrse desde adentro de esa carpeta.
+Yo le puse `spotify-visualizer` de nombre pero puedes usar el que sea. La carpeta con este nombre contiene todos los archivos básicos para el proyecto. Todos los comandos que empiecen por `npm` de ahora en adelante tienen que correrse desde adentro de esa carpeta.
 
 Por default, CRA crea un _service worker_ para tu aplicación. Como no lo vamos a usar puedes borrarlo. Para hacerlo sólo cambia el contenido del archivo `src/index.js` por:
 
@@ -64,17 +62,15 @@ Estas credenciales nos van a ayudar a conectarnos con Spotify. No podemos usar e
 
 ## NodeJS
 
-La base de CRA es un servidor en NodeJS. Como ya mencioné, hay que modificar el servidor para poder conectarse a la API. Para ello vamos a usar varios paquetes que nos ayuden a simplificar el proceso.
-
-Para la instalación usamos el flag `--save-dev` para que los módulos que se instalen se hagan únicamente del lado del servidor y no en el frontend:
+Hay que modificar el servidor que usa CRA por defecto para poder conectarse a la API. Para ello vamos a usar varios paquetes que nos ayuden a simplificar el proceso. Usamos el flag `--save-dev` para que los módulos que se instalen se hagan únicamente del lado del servidor y no en el frontend:
 
 `
 npm install body-parser cookie-parser express node-env-run npm-run-all --save-dev
 `
 
-En el archivo `package.json` deben aparecer al final estas nuevas dependencias bajo el nombre `devDependencies`. 
+Vas a ver las diferencias en el archivo `package.json` donde deben aparecer estas nuevas dependencias bajo el nombre `devDependencies`. 
 
-Para seguir el [flujo de autorización](https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow) de la API vamos a cambiar los scripts que se crearon por defecto con CRA. También vamos a agregar un proxy porque se van a estar corriendo dos aplicaciones al mismo tiempo, la de CRA y el servidor que vamos a crear. Para hacer esto, en el archivo `package.json` eliminamos el objeto `scripts` y lo sustituimos por:
+Vamos a seguir el [flujo de autorización](https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow) de la API. Para ello vamos a agregar un segundo servidor (además del de CRA). Primero, vamos cambiar los _scripts_ por defecto de CRA y a agregar un _proxy_ para el segundo servidor. Cambia el archivo `package.json` quitando el objeto `scripts` reemplazándolo por:
 
 ```
 package.json
@@ -85,12 +81,15 @@ package.json
   },
 "proxy": "http://localhost:8001",
 ```
-En el `script` _start_ estamos usando el comando `run-p` del paquete `npm-run-all` para correr simultáneamente el servidor de react y el nuestro (_server_). Nuestro servidor usa el archivo `.env` (creado en la sección anterior) usando el paquete `node-env-run`.
 
-Ya que está configurado el servidor tenemos que programar todo el flujo de autorización de la API de Sportify. Para esto, crea una carpeta llamada `server` en la base de tu aplicación. Ahí adentro crea un archivo llamado `index.js` con este contenido:
+Nota como también añadimos el objeto `proxy` apuntando a `http://localhost:8001`.
+
+En el `script` _start_ estamos usando el comando `run-p` del paquete `npm-run-all` para correr simultáneamente el servidor de CRA y el nuestro (llamado _server_). Nuestro servidor usa el archivo `.env` (creado en la sección anterior) por medio del paquete `node-env-run`.
+
+Ahora ya podemos crear la lógica de nuestro servidor. Primero crea una carpeta llamada `server` con un archivo llamado `index.js` con este contenido:
 
 ```
-index.js
+server/index.js
 const express = require('express');
 const bodyParser = require('body-parser');
 const querystring = require('querystring');
@@ -193,16 +192,75 @@ app.listen(8001, () =>
 
 Los detalles están en el código, pero lo importante es entender el proceso:
 - Empezamos en `http://localhost:8001/login`. Aquí el usuario se va a autenticar con Spotify usando sus credenciales. 
-- Una vez que el usuario autoriza la aplicación, Spotify nos regresa unos tokens de pedido que nos permiten solicitar los tokens de autorización (para que el usuario no vuelva a conectarse cada que regresa a la página). Por la configuración que hicimos en el dashboard, Spotify nos regresa a `http://localhost:8001/callback`.
-- De ahí enviamos los tokens de pedido para recibir los tokens de autorización y los guardamos en _cookies_.
-- Ya que tenemos los tokens, regresamos a `http://localhost:8000/#start` para comenzar la aplicación.
+- El usuario debe de permitirnos accesso a su cuenta.
+- Solicitamos a Spotify tokens de acceso. Vamos a usarlos para que el usuario no vuelva a conectarse cada que regresa a la página.
+- Spotify nos regresa a `http://localhost:8001/callback`. Configuramos esto en el Dashboard en la segunda sección.
+- Guardamos los tokens en _cookies_ y ahora ya podemos pedir información a la API.
+- Vamos a `http://localhost:8000/#start` para comenzar la aplicación.
 
-## Front-end
+Algunos de estos pasos se complementan con el lado del cliente que veremos a continuación.
 
-Ya con las bases del servidor necesitamos que nuestra aplicación en React se conecte con todo lo que está pasando detrás. Para esto vamos a crear un componente vacío (renderless) que se haga cargo de la conexión con Spotify. Crea la carpeta `/src/components` y adentro crea un archivo llamado `APIHandler.js` con este contenido:
+## Frontend
+
+Ya que el servidor se puede conectar con la API es momento de cambiar la aplicación por defecto de React.
+Dado que estamos usando _cookies_ para los tokens, necesitamos código que las lea. Crea la carpeta `src/components` con un archivo llamado `cookie.js` con lo siguiente:
 
 ```
-APIHandler.js
+src/components/cookie.js
+export function get (sKey) {
+  if (!sKey) { return null; }
+  return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" 
+    + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") 
+    + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
+}
+
+export function set (sKey, sValue, vEnd, sPath, sDomain, bSecure) {
+  if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) { return false; }
+  var sExpires = "";
+  if (vEnd) {
+    switch (vEnd.constructor) {
+      case Number:
+        sExpires = vEnd === Infinity ? "; expires=Fri, 31 Dec 9999 23:59:59 GMT" : "; max-age=" + vEnd;
+        break;
+      case String:
+        sExpires = "; expires=" + vEnd;
+        break;
+      case Date:
+        sExpires = "; expires=" + vEnd.toUTCString();
+        break;
+    }
+  }
+  document.cookie = encodeURIComponent(sKey) + "=" 
+    + encodeURIComponent(sValue) + sExpires + (sDomain ? "; domain=" + sDomain : "") 
+    + (sPath ? "; path=" + sPath : "") + (bSecure ? "; secure" : "");
+  return true;
+}
+
+export function remove (sKey, sPath, sDomain) {
+  if (!this.hasItem(sKey)) { return false; }
+  document.cookie = encodeURIComponent(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" 
+    + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "");
+  return true;
+}
+
+export function has (sKey) {
+  if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) { return false; }
+  return (new RegExp("(?:^|;\\s*)" 
+    + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") 
+    + "\\s*\\=")).test(document.cookie);
+}
+
+export function keys () { 
+  var aKeys = document.cookie.replace(/((?:^|\s*;)[^\=]+)(?=;|$)|^\s*|\s*(?:\=[^;]*)?(?:\1|$)/g, "").split(/\s*(?:\=[^;]*)?;\s*/);
+  for (var nLen = aKeys.length, nIdx = 0; nIdx < nLen; nIdx++) { aKeys[nIdx] = decodeURIComponent(aKeys[nIdx]); }
+  return aKeys;
+}
+```
+
+Después creamos un componente _renderless_ para manejar los llamados al API. En la carpeta `/src/components` crea el archivo `APIHandler.js` con este contenido:
+
+```
+src/components/APIHandler.js
 import { Component } from 'react';
 import * as cookie from './cookie';
 
@@ -496,80 +554,29 @@ import * as cookie from './cookie';
 }
 ```
 
-Al principio checamos que ya tengamos las _cookies_ con los tokens de autorización del usuario. Si no es así, redirigimos al usario a `http://localhost:8001/login` para que se identifique y hacemos todo el proceso de verificación. Además de ese proceso, este componente se va a encargar de mantener actualizada toda la información del track que estemos escuchando en Spotify en el método `getTrackData`. Es aquí donde va a estar la diferencia con respecto a un sistema que sólo escucha lo que está sonando en el micrófono.
+Primero checamos que tengamos los tokens en las cookies. Si no los tenemos hacemos el flujo de autorización. Ya que los tenemos preguntamos a la API acerca de la canción que se está escuchando. Esto se hace en el método `getTrackData`. Aquí es donde podemos obtener mucha más información que sólo frecuencia y amplitud.
 
-> **Al estar conectado directamente con Spotify, puedes escuchar la música en unas bocinas, ver los visuales en una computadora y controlar las canciones que escuchas en un teléfono y todo va a estar sincronizado con el servidor.**
+> ***Como estamos conectados al servidor de Spotify podemos:***
+> - *** Escuchar música en unas bocinas Bluetooth***
+> - *** Cambiar las canciones con nuestro teléfono***
+> - *** Ver visuales en nuestra computadora***
 
-En este caso sólo se está usando la información del ritmo (_bars, beats, sections, segments_ y _tatums_), pero hay más información que se puede utilizar tanto en el [análisis](https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-analysis/) como en las [características](https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-features/) de la canción. 
+En este caso sólo estamos usando la información del ritmo , pero hay más información que se [puede](https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-analysis/) [utilizar](https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-features/) de la canción. 
 
-Dado que estamos usando _cookies_ para los tokens, necesitamos código que las lea. Crea un archivo llamado `cookie.js` en la misma carpeta `/src/components` con lo siguiente:
 
-```
-cookie.js
-export function get (sKey) {
-  if (!sKey) { return null; }
-  return decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" 
-    + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") 
-    + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || null;
-}
-
-export function set (sKey, sValue, vEnd, sPath, sDomain, bSecure) {
-  if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) { return false; }
-  var sExpires = "";
-  if (vEnd) {
-    switch (vEnd.constructor) {
-      case Number:
-        sExpires = vEnd === Infinity ? "; expires=Fri, 31 Dec 9999 23:59:59 GMT" : "; max-age=" + vEnd;
-        break;
-      case String:
-        sExpires = "; expires=" + vEnd;
-        break;
-      case Date:
-        sExpires = "; expires=" + vEnd.toUTCString();
-        break;
-    }
-  }
-  document.cookie = encodeURIComponent(sKey) + "=" 
-    + encodeURIComponent(sValue) + sExpires + (sDomain ? "; domain=" + sDomain : "") 
-    + (sPath ? "; path=" + sPath : "") + (bSecure ? "; secure" : "");
-  return true;
-}
-
-export function remove (sKey, sPath, sDomain) {
-  if (!this.hasItem(sKey)) { return false; }
-  document.cookie = encodeURIComponent(sKey) + "=; expires=Thu, 01 Jan 1970 00:00:00 GMT" 
-    + (sDomain ? "; domain=" + sDomain : "") + (sPath ? "; path=" + sPath : "");
-  return true;
-}
-
-export function has (sKey) {
-  if (!sKey || /^(?:expires|max\-age|path|domain|secure)$/i.test(sKey)) { return false; }
-  return (new RegExp("(?:^|;\\s*)" 
-    + encodeURIComponent(sKey).replace(/[\-\.\+\*]/g, "\\$&") 
-    + "\\s*\\=")).test(document.cookie);
-}
-
-export function keys () { 
-  var aKeys = document.cookie.replace(/((?:^|\s*;)[^\=]+)(?=;|$)|^\s*|\s*(?:\=[^;]*)?(?:\1|$)/g, "").split(/\s*(?:\=[^;]*)?;\s*/);
-  for (var nLen = aKeys.length, nIdx = 0; nIdx < nLen; nIdx++) { aKeys[nIdx] = decodeURIComponent(aKeys[nIdx]); }
-  return aKeys;
-}
-```
 
 ## Visuales
 
-Para generar los visuales vamos a usar una de las librerías más populares para usar WebGL: ThreeJS. Como nuestra aplicación está hecha en React necesitamos también de una librería que conecte Three con React. Esa librería es [`react-three-fiber`](https://github.com/react-spring/react-three-fiber). Para este ejemplo vamos a usar también [`react-spring`](https://www.react-spring.io/) para facilitar las animaciones.
-
-Como todas estas librerías se van a correr en el frontend, para instalarlas sólo necesitamos usar:
+Ahora sí, lo divertido. Para generar los visuales vamos a usar una de las librerías más populares para usar WebGL: ThreeJS. Como nuestra aplicación está hecha en React necesitamos también de una librería que conecte Three con React. Esa librería es [`react-three-fiber`](https://github.com/react-spring/react-three-fiber). Para este ejemplo vamos a usar también [`react-spring`](https://www.react-spring.io/) para facilitar las animaciones. Como todas estas librerías se van a correr en el frontend, para instalarlas sólo necesitamos usar:
 
 `
 npm install three react-three-fiber react-spring
 `
 
-Ya teniendo todas las librerías hay que crear una escena que utilice la información de Spotify para ser audioreactiva. Aquí hay una escena muy sencilla que sirve para visualizar los diferentes tipos de ritmos que se obtienen de una canción. Sólo copia y pega este código en un archivo que se llame `Scene.js` en `src/components`.
+Ya tenemos casi todo lo que se necesita para hacer un visual audioreactivo. En este ejemplo verás una escena 3D muy básica. Muestra los diferentes tipos de ritmos de la API cambiando el tamaño de unas piedras. Para usarlo, copia y pega el código en un archivo llamado `Scene.js` en la carpeta `src/components`.
 
 ```
-Scene.js
+src/components/Scene.js
 import React from 'react';
 import { Canvas, useThree, useFrame } from "react-three-fiber"
 import { useSpring, a } from "react-spring/three"
@@ -751,16 +758,16 @@ export default function DodecahedronScene(props) {
 
 Ya tenemos el backend que nos da la información de la canción que escuchamos y el frontend que muestra esta información con visuales. Lo único que queda es unirlos.
 
-El script principal va a manejar el _estado_ de la aplicación. En este caso sólo va a estar definido por dos valores: `active` y `track`. El primero define si hay alguna canción sonando en ese momento y el segundo tiene toda la información de la canción que esté sonando.
+El script principal va a manejar el _estado_ de la aplicación. Vamos a definirlo con dos valores: `active` y `track`. El primero nos dice si hay alguna canción sonando en ese momento. El segundo tiene toda la información de la canción que esté sonando.
 
-El componente que nos va a dar la información de Spotify (`APIHandler`) necesita de dos _callbacks_ dentro de sus _propiedades_, `setActive` y `setTrack` para poder cambiar el _estado_ del script principal.
+El componente `APIHandler` necesita de dos _callbacks_ dentro de sus _propiedades_, `setActive` y `setTrack` para poder cambiar el _estado_.
 
-El componente que crea los visuales (`DodecahedronScene`) necesita saber el _estado_ de la canción para mostrar lo que se está escuchando por lo que necesita tanto de `active` como de `track`.
+El componente que crea los visuales (`DodecahedronScene`) necesita saber el _estado_ de la canción (`active` y `track`) para mostrar lo que se está escuchando.
 
 Al final, el script `App.js` en la carpeta `src` debe de quedar así:
 
 ```
-App.js
+src/App.js
 import React, { Component } from 'react';
 import APIHandler from './components/APIHandler';
 import Scene from './components/Scene';
@@ -810,10 +817,10 @@ default class App extends Component{
 }
 ```
 
-Por último, necesitamos hacer unos pequeños ajustes en el CSS para que la aplicación se vea bien. Para ello hay que cambiar `App.css` en la carpeta `src` a:
+Por último, necesitamos hacer unos cambios al CSS. Cambia el contenido de `App.css` en la carpeta `src` por:
 
 ```
-App.css
+src/App.css
 * {
   box-sizing: border-box;
 }
@@ -864,7 +871,12 @@ canvas {
 }
 ```
 
-Si todo funciona como debería puedes correr `npm run start` en tu terminal, ir a `http://localhost:8000`, conectarte a tu cuenta de Spotify y ver a unos dodecahedros moverse.
+Si todo funciona como debería:
+- Corre `npm run start` en tu terminal
+- Ve a `http://localhost:8000` en tu navegador
+- Conectate a tu cuenta de Spotify
+- Pon una canción en Spotify
+- Ve a unos dodecahedros moverse
 
 ## ...¿y ahora?
 

@@ -3,12 +3,13 @@ import { makeStyles } from '@material-ui/core/styles';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
+import Popover from '@material-ui/core/Popover';
+
 import FileCopyIcon from '@material-ui/icons/FileCopy';
-import CodeIcon from '@material-ui/icons/Code';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -29,7 +30,7 @@ export default function Code({ children }){
     setExpanded(!expanded);
   }
 
-  const handleClickCopy = () => {
+  const handleClickCopy = (event) => {
     navigator.clipboard.writeText(children.replace(children.split("\n")[0],""))
   }
 
@@ -45,9 +46,11 @@ export default function Code({ children }){
           </ExpansionPanel>
         </Grid>
         <Grid item xs={1}>
-          <IconButton onClick={handleClickCopy}>
-            <FileCopyIcon/>
-          </IconButton>
+          <Tooltip title="Copy">
+            <IconButton onClick={handleClickCopy}>
+              <FileCopyIcon/>
+            </IconButton>
+          </Tooltip>
         </Grid>
       </Grid>
     </div>
