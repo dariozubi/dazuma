@@ -2,7 +2,10 @@ import React from 'react'
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Divider from '@material-ui/core/Divider';
+import IconButton from '@material-ui/core/IconButton';
+import CommentIcon from '@material-ui/icons/Comment';
 import Box from '@material-ui/core/Box';
 
 import Layout from '../src/Layout';
@@ -15,6 +18,8 @@ export default function Index(props) {
         <List>
           {
             getPosts().map((a,k)=>{
+              const date = new Date(a.date);
+              const options = {day: "numeric", year: "numeric", month: "short"};
               return (
                 <React.Fragment  key={k}>
                   <ListItem button component="a" href={'blog/'+a.id}>
@@ -22,6 +27,12 @@ export default function Index(props) {
                       primary={a.title}
                       secondary={a.tldr}
                     />
+                    <ListItemSecondaryAction>
+                      <ListItemText
+                      secondary={date.toLocaleDateString('es', options)}
+                      edge="end"
+                    />
+                    </ListItemSecondaryAction>
                   </ListItem>
                   <Divider variant="inset" component="li"/>
                 </React.Fragment>

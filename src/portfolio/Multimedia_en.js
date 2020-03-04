@@ -24,7 +24,7 @@ export default function Multimedia(){
           id='211573179'
           title='Acuario Inbursa'
           year='2017'
-          description='Main developer of the "Sketch Acuario" and "Realidad Aumentada" apps for Acuario Inbursa. Done with Unity.'
+          description='Main developer of the "Sketch Acuario" and "Realidad Aumentada" apps for Acuario Inbursa. Done with Unity and Touchdesigner.'
         />
       </Grid>
       <Grid item xs={6} lg={3}>

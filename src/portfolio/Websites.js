@@ -48,7 +48,7 @@ export default function Websites(){
             />
             <CardContent>
               <Typography variant="caption" color="textSecondary" component="p">
-                Desarrollada en React y NextJS. 
+                Realizada con React, Three y Next. 
               </Typography>
             </CardContent>
           </CardActionArea>
@@ -67,7 +67,7 @@ export default function Websites(){
             />
             <CardContent>
               <Typography variant="caption" color="textSecondary" component="p">
-                Programador de la p&aacute;gina web de la empresa INTUS. Desarrollada en ThreeJS. 
+                Programador de la p&aacute;gina web de la empresa INTUS. Realizada con Three. 
               </Typography>
             </CardContent>
           </CardActionArea>
@@ -86,7 +86,7 @@ export default function Websites(){
             />
             <CardContent>
               <Typography variant="caption" color="textSecondary" component="p">
-                Programador de la p&aacute;gina web de la empresa HOXA. Desarrollada en Wordpress. 
+                Programador de la p&aacute;gina web de la empresa HOXA. Realizada con Wordpress. 
               </Typography>
             </CardContent>
           </CardActionArea>
@@ -105,7 +105,7 @@ export default function Websites(){
             />
             <CardContent>
               <Typography variant="caption" color="textSecondary" component="p">
-                Programador de la p&aacute;gina web de la artista Pamela Zubillaga. Desarrollada en Wordpress. 
+                Programador de la p&aacute;gina web de la artista Pamela Zubillaga. Realizada con Wordpress. 
               </Typography>
             </CardContent>
           </CardActionArea>

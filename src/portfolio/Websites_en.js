@@ -48,7 +48,7 @@ export default function Websites(){
             />
             <CardContent>
               <Typography variant="caption" color="textSecondary" component="p">
-                Developed with React and NextJS.
+                Developed with React, Three and Next.
               </Typography>
             </CardContent>
           </CardActionArea>
@@ -67,7 +67,7 @@ export default function Websites(){
             />
             <CardContent>
               <Typography variant="caption" color="textSecondary" component="p">
-                INTUS website. Developed with ThreeJS. 
+                INTUS website. Developed with Three. 
               </Typography>
             </CardContent>
           </CardActionArea>
