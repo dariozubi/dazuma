@@ -23,14 +23,8 @@ export default function Index(props) {
                   <ListItem button component="a" href={'blog/'+a.id}>
                     <ListItemText
                       primary={a.title}
-                      secondary={a.tldr}
-                    />
-                    <ListItemSecondaryAction>
-                      <ListItemText
                       secondary={date.toLocaleDateString('en', options)}
-                      edge="end"
                     />
-                    </ListItemSecondaryAction>
                   </ListItem>
                   <Divider variant="inset" component="li"/>
                 </React.Fragment>
