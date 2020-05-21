@@ -16,7 +16,7 @@ export default function Index(props) {
           {
             getPosts().map((a,k)=>{
               const date = new Date(a.date);
-              const options = {day: "numeric", year: "numeric", month: "short"};
+              const options = {year: "numeric", month: "long"};
               return (
                 <React.Fragment  key={k}>
                   <ListItem button component="a" href={'blog/'+a.id}>

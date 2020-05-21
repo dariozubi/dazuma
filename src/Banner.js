@@ -35,7 +35,7 @@ export default function Banner({ language }){
 
         <Box ml={5}>
           <Typography variant="h4" component="p">
-            Dar&iacute;o Zubillaga Mart&iacute;n
+            DAZUMA
           </Typography>
         </Box>
 
@@ -53,7 +53,7 @@ export default function Banner({ language }){
         </ListItem>
         <ListItem button component="a" key={2} href={(lan === 'es' ? '' : '/en') + '/portfolio'}>
           <ListItemIcon><PermMediaIcon/></ListItemIcon>
-          <ListItemText primary={lan === 'es' ? "Trabajos" : 'Works'} />
+          <ListItemText primary={lan === 'es' ? "Trabajos" : 'Work'} />
         </ListItem>
         <ListItem button component="a" key={3} href={(lan === 'es' ? '' : '/en') + '/info'}>
           <ListItemIcon><InfoIcon/></ListItemIcon>
