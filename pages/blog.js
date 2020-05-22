@@ -10,7 +10,10 @@ import { getPosts } from '../src/blog/content'
 
 export default function Index(props) {
   return (
-    <Layout>
+    <Layout 
+      title="Blog"
+      description="Blog de Darío Zubillaga. Software como debería ser."
+    >
       <Box mt={12} mx={4}>
         <List>
           {

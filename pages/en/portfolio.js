@@ -5,7 +5,9 @@ import Box from '@material-ui/core/Box';
 
 export default function Trabajos(){
   return(
-    <Layout>
+    <Layout
+      title="Work"
+    >
       <Box mt={8} mx={4}>
         <Websites/>
         <Multimedia/>

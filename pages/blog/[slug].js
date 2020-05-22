@@ -1,6 +1,8 @@
 import React from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { MDXProvider } from '@mdx-js/react'
+import Head from 'next/head'
+import { useRouter } from 'next/router'
 
 import AppBar from '@material-ui/core/AppBar';
 import Drawer from '@material-ui/core/Drawer';
@@ -11,11 +13,10 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
-import { useRouter } from 'next/router'
-
 import { getPost } from '../../src/blog/content'
 import Banner from '../../src/Banner';
 import Code from '../../src/Code';
+import dazuma from '../../src/images/dazuma.jpg'; // >=1200px×630px 1.91:1 <1MB
 
 const drawerWidth = 240;
 
@@ -81,6 +82,23 @@ const BlogTemplate = (props) => {
 
   return (
     <div className={classes.root}>
+
+      <Head>
+        <title>{post.title ? "dazuma | " + post.title : "dazuma"}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content={post.description ? post.description : "Darío Zubillaga's personal website. Software done right."} />
+        <meta property="og:title" content={post.title ? post.title : "Darío Zubillaga"} />
+        <meta property="og:image" content={post.image ? post.image : dazuma} /> 
+        <meta property="og:description" content={post.description ? post.description : "Darío Zubillaga's personal website. Software done right."} />
+        <meta property="og:url" content={"https://dazu.ma" + router.pathname.substring(0,router.pathname.length-6) + props.id} />
+        <meta property="twitter:card" content="summary_large_image"/>
+
+        <meta property="og:type" content={post.type ? post.type : "website"} />
+        <meta name="twitter:image:alt" content={post.image_alt ? post.image_alt : "Darío Zubillaga"} />
+        <meta property="og:site_name" content="dazuma"/>
+        
+      </Head>
+
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <IconButton
@@ -93,7 +111,9 @@ const BlogTemplate = (props) => {
           </IconButton>
         </Toolbar>
       </AppBar>
+
       <nav className={classes.drawer}>
+
         <Hidden smUp implementation="css">
           <Drawer
             variant="temporary"
@@ -109,6 +129,7 @@ const BlogTemplate = (props) => {
             <Banner language={router.pathname.substring(1,4) == 'en/' ? 'en' : 'es'}/>
           </Drawer>
         </Hidden>
+
         <Hidden xsDown implementation="css">
           <Drawer
             classes={{
@@ -120,7 +141,9 @@ const BlogTemplate = (props) => {
             <Banner language={router.pathname.substring(1,4) == 'en/' ? 'en' : 'es'}/>
           </Drawer>
         </Hidden>
+
       </nav>
+
       <Hidden smUp implementation="css" className={classes.nodrawercontent}>
         <main>
           <Box mx={8} my={12}>
@@ -133,6 +156,7 @@ const BlogTemplate = (props) => {
           </Box>
         </main>
       </Hidden>
+
       <Hidden xsDown implementation="css" className={classes.content}>
         <main>
           <Box mx={8} my={12}>
@@ -145,6 +169,7 @@ const BlogTemplate = (props) => {
           </Box>
         </main>
       </Hidden>
+
     </div>
   )
 };

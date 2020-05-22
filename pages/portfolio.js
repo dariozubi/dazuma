@@ -5,7 +5,10 @@ import Box from '@material-ui/core/Box';
 
 export default function Trabajos(){
   return(
-    <Layout>
+    <Layout
+      title="Trabajo"
+      description="Darío Zubillaga. Software como debería ser."
+    >
       <Box mt={8} mx={4}>
         <Websites/>
         <Multimedia/>

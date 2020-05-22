@@ -3,7 +3,9 @@ import Rectangles from '../../src/home/Rectangles';
 
 export default function Index() {
   return (
-    <Layout>
+    <Layout
+      title="Home"
+    >
       <Rectangles/>
     </Layout>
   );

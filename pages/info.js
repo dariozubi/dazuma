@@ -4,7 +4,10 @@ import Semblanza from "../src/text/semblanza.md"
 
 export default function Index() {
   return (
-    <Layout>
+    <Layout
+      title="Info"
+      description="Darío Zubillaga. Software como debería ser."
+    >
       <Box mt={12} mx={4}>
         <Semblanza/>
       </Box>

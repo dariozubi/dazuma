@@ -4,7 +4,9 @@ import Box from '@material-ui/core/Box';
 
 export default function Index() {
   return (
-    <Layout>
+    <Layout
+      title="Info"
+    >
       <Box mt={12} mx={4}>
         <Semblanza/>
       </Box>

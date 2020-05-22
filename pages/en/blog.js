@@ -2,7 +2,6 @@ import React from 'react'
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import Divider from '@material-ui/core/Divider';
 import Box from '@material-ui/core/Box';
 
@@ -11,7 +10,10 @@ import { getPosts } from '../../src/blog/content_en'
 
 export default function Index(props) {
   return (
-    <Layout>
+    <Layout 
+      title="Blog"
+      description="Darío Zubillaga's Blog. Software done right."
+    >
       <Box mt={12} mx={4}>
         <List>
           {

@@ -1,5 +1,7 @@
 import React from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { useRouter } from 'next/router'
+import Head from 'next/head'
 
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
@@ -11,11 +13,11 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
+import MenuIcon from '@material-ui/icons/Menu';
 import LinkedInIcon from '@material-ui/icons/LinkedIn';
 import GitHubIcon from '@material-ui/icons/GitHub';
 import ToysIcon from '@material-ui/icons/Toys';
@@ -26,8 +28,8 @@ import PermMediaIcon from '@material-ui/icons/PermMedia';
 import BlurOnIcon from '@material-ui/icons/BlurOn';
 
 import Banner from './Banner';
+import dazuma from './images/dazuma.jpg'; // >=1200px×630px 1.91:1 <1MB
 
-import { useRouter } from 'next/router'
 
 export function recursiveCloneChildren(children){
   return React.Children.map(children, child => {
@@ -97,8 +99,27 @@ export default function ResponsiveDrawer(props) {
 
   return (
     <div className={classes.root}>
+
+      <Head>
+        <title>{props.title ? "dazuma | " + props.title : "dazuma"}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content={props.description ? props.description : "Darío Zubillaga's personal website. Software done right."} />
+        <meta property="og:title" content={props.title ? props.title : "Darío Zubillaga"} />
+        <meta property="og:image" content={props.image ? props.image : dazuma} /> 
+        <meta property="og:description" content={props.description ? props.description : "Darío Zubillaga's personal website. Software done right."} />
+        <meta property="og:url" content={"https://dazu.ma" +router.pathname} />
+        <meta property="twitter:card" content="summary_large_image"/>
+
+        <meta property="og:type" content={props.type ? props.type : "website"} />
+        <meta name="twitter:image:alt" content={props.image_alt ? props.image_alt : "Darío Zubillaga"} />
+        <meta property="og:site_name" content="dazuma"/>
+        
+      </Head>
+
       <AppBar position="fixed" className={classes.appBar}>
+
         <Toolbar>
+
           <IconButton
             color="inherit"
             edge="start"
@@ -110,9 +131,13 @@ export default function ResponsiveDrawer(props) {
           <Box className={classes.content}></Box>
           <Button color="inherit" onClick={handleESClick}>ES</Button>
           <Button color="inherit" onClick={handleENClick}>EN</Button>
+
         </Toolbar>
+
       </AppBar>
+
       <nav className={classes.drawer}>
+
         <Hidden smUp implementation="css">
           <Drawer
             variant="temporary"
@@ -128,6 +153,7 @@ export default function ResponsiveDrawer(props) {
             <Banner language={router.pathname.substring(1,4) == 'en/' ? 'en' : 'es'}/>
           </Drawer>
         </Hidden>
+
         <Hidden xsDown implementation="css">
           <Drawer
             classes={{
@@ -139,14 +165,19 @@ export default function ResponsiveDrawer(props) {
             <Banner language={router.pathname.substring(1,4) == 'en/' ? 'en' : 'es'}/>
           </Drawer>
         </Hidden>
+
       </nav>
+
       <main className={classes.content}>
+
         <Hidden smUp implementation="css">
           {elements}
         </Hidden>
+
         <Hidden xsDown implementation="css">
           {elements}
         </Hidden>
+        
       </main>
     </div>
   );
