@@ -18,7 +18,7 @@ import Divider from '@material-ui/core/Divider';
 import ButtonBase from '@material-ui/core/ButtonBase';
 import {useState} from 'react';
 
-import logo from './images/logo6.png';
+import logo from './images/dzm.svg';
 
 export default function Banner({ language }){
   const [lan, setLan] = useState(language)
@@ -28,21 +28,13 @@ export default function Banner({ language }){
         focusRipple
         href="/"
       >
-        <Box>
+        <Box m={4}>
           <img src={logo} width="100%"/>
         </Box>
       </ButtonBase>
 
-        <Box ml={5}>
-          <Typography variant="h4" component="p">
-            DAZUMA
-          </Typography>
-        </Box>
-
-        <Box ml={5} mb={3}>
-          <Typography variant="body2" color="textSecondary" component="p">
-            dariozubi@gmail.com 
-          </Typography>
+        <Box mb={3} textAlign="center" fontWeight="fontWeightLight" fontSize="h6.fontSize">
+            dario@dazu.ma
         </Box>
       
       <Divider/>

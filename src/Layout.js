@@ -28,7 +28,7 @@ import PermMediaIcon from '@material-ui/icons/PermMedia';
 import BlurOnIcon from '@material-ui/icons/BlurOn';
 
 import Banner from './Banner';
-import dazuma from './images/dazuma.jpg'; // >=1200px×630px 1.91:1 <1MB
+import dazuma from './images/dzm.svg'; // >=1200px×630px 1.91:1 <1MB
 
 
 export function recursiveCloneChildren(children){
@@ -102,6 +102,9 @@ export default function ResponsiveDrawer(props) {
 
       <Head>
         <title>{props.title ? "dazuma | " + props.title : "dazuma"}</title>
+
+        <link rel="shortcut icon" href={dazuma}/>
+
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="description" content={props.description ? props.description : "Darío Zubillaga's personal website. Software done right."} />
         <meta property="og:title" content={props.title ? props.title : "Darío Zubillaga"} />
@@ -109,7 +112,6 @@ export default function ResponsiveDrawer(props) {
         <meta property="og:description" content={props.description ? props.description : "Darío Zubillaga's personal website. Software done right."} />
         <meta property="og:url" content={"https://dazu.ma" +router.pathname} />
         <meta property="twitter:card" content="summary_large_image"/>
-
         <meta property="og:type" content={props.type ? props.type : "website"} />
         <meta name="twitter:image:alt" content={props.image_alt ? props.image_alt : "Darío Zubillaga"} />
         <meta property="og:site_name" content="dazuma"/>
