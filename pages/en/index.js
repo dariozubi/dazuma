@@ -5,6 +5,7 @@ export default function Index() {
   return (
     <Layout
       title="Home"
+      description="Software developer"
     >
       <Rectangles/>
     </Layout>
