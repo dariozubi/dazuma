@@ -1,4 +1,6 @@
 import React, { Suspense, useRef, useMemo, useState, useEffect } from 'react';
+import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 import { Canvas, extend, useThree, useFrame, useLoader } from 'react-three-fiber';
 import { useSpring, config } from 'react-spring';
@@ -46,6 +48,7 @@ const useStyles = makeStyles(theme => ({
     textAlign: 'left',
     fontSize: '8vh',
     width: '100%',
+    paddingLeft: '16px',
     '&:hover': {
       backgroundColor: '#01001e1c',
       cursor: 'pointer'
@@ -168,9 +171,12 @@ const Demo = ({ track }) => {
   const [type, set] = useState(0);
   const styles = useStyles();
 
+  const router = useRouter();
+
   return (
     <React.Fragment>
       <div className={styles.container}>
+
         <Canvas 
           className={styles.root}
           camera={{ position: [0, -2, 15] }}
@@ -181,19 +187,58 @@ const Demo = ({ track }) => {
             gl.outputEncoding = THREE.sRGBEncoding
           }}
         >
+
           <Lights type={type} />
+
           <Suspense fallback={null}>
             <Model type={type}/>
             <Model layer={OCCLUSION_LAYER} />
           </Suspense>
+
           <Effects type={type} />
+
         </Canvas>
+
       </div>
+
       <div className={styles.flex}>
-        <div className={styles.text} onMouseOver={()=>set(1)} onMouseLeave={()=>set(0)}>Web</div>
-        <div className={styles.text} onMouseOver={()=>set(2)} onMouseLeave={()=>set(0)}>VR</div>
-        <div className={styles.text} onMouseOver={()=>set(3)} onMouseLeave={()=>set(0)}>Multimedia</div>
-        <div className={styles.text} onMouseOver={()=>set(4)} onMouseLeave={()=>set(0)}>More</div>
+
+        <Link href={router.pathname !== '' ? 'en/work#Web' : 'es/trabajo#Web'}>
+          <div 
+            className={styles.text}
+            onMouseOver={()=>set(1)} 
+            onMouseLeave={()=>set(0)}>
+            Web
+          </div>
+        </Link>
+
+        <Link href={router.pathname !== '' ? 'en/work#Multimedia' : 'es/trabajo#Multimedia'}>
+          <div 
+            className={styles.text} 
+            onMouseOver={()=>set(3)} 
+            onMouseLeave={()=>set(0)}>
+            Multimedia
+          </div>
+        </Link>
+
+        <Link href={router.pathname !== '' ? 'en/work#VR' : 'es/trabajo#VR'}>
+          <div 
+            className={styles.text} 
+            onMouseOver={()=>set(2)} 
+            onMouseLeave={()=>set(0)}>
+            VR
+          </div>
+        </Link>
+
+        <Link href={router.pathname !== '' ? 'en/work#More' : 'es/trabajo#More'}>
+          <div 
+            className={styles.text} 
+            onMouseOver={()=>set(4)} 
+            onMouseLeave={()=>set(0)}>
+            {router.pathname !== '/' ? 'More' : 'Más'}
+          </div>
+        </Link>
+
       </div>
     </React.Fragment>
   )

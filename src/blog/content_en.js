@@ -11,7 +11,7 @@ export function getPost (id) {
 }
 
 function requirePosts () {
-  return require.context('../text/blog_en', true, /\.mdx$/)
+  return require.context('../text/blog/en', true, /\.mdx$/)
 }
 
 function processPosts (posts) {
@@ -22,7 +22,6 @@ function processPosts (posts) {
 
 function parsePosts (raw_posts) {
   const keys = raw_posts.keys();
-  console.log(keys)
   const posts = keys.map(raw_posts);
   return posts
     .map((p, k) => ({

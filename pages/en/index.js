@@ -1,5 +1,5 @@
 import Layout from '../../src/Layout';
-import Rectangles from '../../src/home/Rectangles';
+import Model from '../../src/home/Model';
 
 export default function Index() {
   return (
@@ -7,7 +7,7 @@ export default function Index() {
       title="Home"
       description="Software developer"
     >
-      <Rectangles/>
+      <Model/>
     </Layout>
   );
 }

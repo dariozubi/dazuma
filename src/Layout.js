@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 
@@ -9,23 +9,10 @@ import Divider from '@material-ui/core/Divider';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
 import MenuIcon from '@material-ui/icons/Menu';
-import LinkedInIcon from '@material-ui/icons/LinkedIn';
-import GitHubIcon from '@material-ui/icons/GitHub';
-import ToysIcon from '@material-ui/icons/Toys';
-import HomeIcon from '@material-ui/icons/Home';
-import InfoIcon from '@material-ui/icons/Info';
-import ChatIcon from '@material-ui/icons/Chat';
-import PermMediaIcon from '@material-ui/icons/PermMedia';
-import BlurOnIcon from '@material-ui/icons/BlurOn';
 
 import Banner from './Banner';
 import dazuma from './images/dzm.svg'; // >=1200px×630px 1.91:1 <1MB
@@ -74,7 +61,6 @@ const useStyles = makeStyles(theme => ({
 
 export default function ResponsiveDrawer(props) {
   const classes = useStyles();
-  const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const handleDrawerToggle = () => {
@@ -87,14 +73,19 @@ export default function ResponsiveDrawer(props) {
 
   const handleENClick = (e) => {
     e.preventDefault()
-    if (router.pathname.substring(1,4) != 'en/')
-      router.push('/en'+router.pathname)
+    if (router.pathname.substring(1,4) != 'en/'){
+      if (router.pathname === '/es/trabajo') router.push('/en/work');
+      else router.push('/en'+router.pathname.substring(3));
+    }
   }
 
   const handleESClick = (e) => {
     e.preventDefault()
-    if (router.pathname.substring(1,4) == 'en/')
-      router.push(router.pathname.substring(3))
+    if (router.pathname.substring(1,3) == 'en'){
+      if (router.pathname === '/en/work') router.push('/es/trabajo');
+      else if (router.pathname === '/en') router.push('/');
+      else router.push('/es'+router.pathname.substring(3));
+    }
   }
 
   return (
@@ -152,7 +143,7 @@ export default function ResponsiveDrawer(props) {
               keepMounted: true, // Better open performance on mobile.
             }}
           >
-            <Banner language={router.pathname.substring(1,4) == 'en/' ? 'en' : 'es'}/>
+            <Banner language={router.pathname.substring(1,3)}/>
           </Drawer>
         </Hidden>
 
@@ -164,7 +155,7 @@ export default function ResponsiveDrawer(props) {
             variant="permanent"
             open
           >
-            <Banner language={router.pathname.substring(1,4) == 'en/' ? 'en' : 'es'}/>
+            <Banner language={router.pathname.substring(1,3)}/>
           </Drawer>
         </Hidden>
 

@@ -31,11 +31,6 @@ export default function Vimeo(props){
             allowFullScreen>
           </iframe>
         </Box>
-        <CardContent>
-          <Typography variant="caption" color="textSecondary" component="p">
-            {props.description}
-          </Typography>
-        </CardContent>
       </CardActionArea>
     </Card>
 	)

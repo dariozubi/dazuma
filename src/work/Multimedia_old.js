@@ -13,7 +13,7 @@ const useStyles = makeStyles(theme => ({
 export default function Multimedia(){
   const classes = useStyles();
 	return(
-		<Grid container spacing={2} className={classes.container}>
+		<Grid container spacing={2} className={classes.container} id="Multimedia">
       <Grid item xs={12}>
         <Typography variant="h4" component="h1" gutterBottom>
           Multimedia

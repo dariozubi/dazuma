@@ -11,7 +11,7 @@ export function getPost (id) {
 }
 
 function requirePosts () {
-  return require.context('../text/blog', true, /\.mdx$/)
+  return require.context('../text/blog/es', true, /\.mdx$/)
 }
 
 function processPosts (posts) {
