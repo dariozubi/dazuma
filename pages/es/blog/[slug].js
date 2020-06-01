@@ -13,10 +13,10 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
-import { getPost } from '../../src/blog/content'
-import Banner from '../../src/Banner';
-import Code from '../../src/Code';
-import dazuma from '../../src/images/dazuma.jpg'; // >=1200px×630px 1.91:1 <1MB
+import { getPost } from '../../../src/blog/content'
+import Banner from '../../../src/Banner';
+import Code from '../../../src/Code';
+import dazuma from '../../../src/images/dazuma.jpg'; // >=1200px×630px 1.91:1 <1MB
 
 const drawerWidth = 240;
 
