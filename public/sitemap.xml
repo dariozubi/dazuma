@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://dazu.ma/blog</loc>
-  </url>
-
-  <url>
     <loc>https://dazu.ma</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/info</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/portfolio</loc>
   </url>
 
   <url>
@@ -29,24 +17,40 @@
   </url>
 
   <url>
-    <loc>https://dazu.ma/en/portfolio</loc>
+    <loc>https://dazu.ma/en/work</loc>
   </url>
 
   <url>
-    <loc>https://dazu.ma/blog/en/audio-reactive-visuals-with-spotify</loc>
+    <loc>https://dazu.ma/es/blog</loc>
   </url>
 
   <url>
-    <loc>https://dazu.ma/blog/en/initial-post</loc>
+    <loc>https://dazu.ma/es/info</loc>
   </url>
 
   <url>
-    <loc>https://dazu.ma/blog/mi-primer-post</loc>
+    <loc>https://dazu.ma/es/trabajo</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/es/blog/[slug]</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/en/blog/audio-reactive-visuals-with-spotify</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/en/blog/initial-post</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/es/blog/mi-primer-post</loc>
   </url>
 
   <url>
     <loc
-      >https://dazu.ma/blog/visuales-audioreactivos-con-musica-de-spotify</loc
+      >https://dazu.ma/es/blog/visuales-audioreactivos-con-musica-de-spotify</loc
     >
   </url>
 </urlset>

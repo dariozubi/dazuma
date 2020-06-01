@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
 
-import SUMO from '../images/sumo.jpg';
+import SUMO from '../images/SUMO.jpg';
 
 const useStyles = makeStyles(theme => ({
   media: {
