@@ -14,6 +14,7 @@ const prettier = require('prettier');
     '!pages/api',
     '!pages/blog/*.js',
     '!pages/en/blog/*.js',
+    '!pages/es/blog/*.js',
   ]);
   const sitemap = `
         <?xml version="1.0" encoding="UTF-8"?>
