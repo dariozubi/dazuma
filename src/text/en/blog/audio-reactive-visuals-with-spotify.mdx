@@ -1,32 +1,31 @@
 export const data = {
-	title: 'Visuales audioreactivos con música de Spotify',
-	date: '2020-02-01',
-  description: 'Un proyecto en React para hacer visuales con música de Spotify.'
+  title: 'Audio-reactive visuals with Spotify',
+  date: '2020-02-01'
 }
 
-Existen muchas formas de generar visuales audio-reactivos. La solución más común es usar un micrófono y traducir el sonido a parámetros para los visuales. En general usas la amplitud o la frecuencia y ya con eso puedes hacer muchas cosas. Sin embargo, si tienes el análisis de la canción de antemano puedes generar cosas mucho más complejas. Puedes generar una narrativa única para cada canción aún cuando los visuales están siendo generados en el momento.
+There are many ways to generate audio-reactive visuals. The most common solution is to use a microphone and translate the sound to parameters you can use. Usually, amplitude and frequency are enough to do a lot of things. Yet, if you have the analysis for the whole song done beforehand, you can do a lot more. You can create an individual narrative for each song even when the code is live.
 
-En internet sólo encontré un proyecto que hace esto: [kaleidosync](https://www.kaleidosync.com/). Hay cosas hechas con música propia o algún número limitado de canciones, pero para estar en la época del streaming creo que nos quedamos cortos.
+I only found something like this: [kaleidosync](https://www.kaleidosync.com/). There are some projects with visuals in limited songs. But nowadays we have all the music in the palm of our hands and we can do better.
 
-La buena noticia es que lo más complicado ya está hecho. La [API de Spotify](https://developer.spotify.com/documentation/web-api/reference/) cuenta con en un análisis básico de las canciones en su repertorio. No me consta que tenga análisis de todas sus canciones, pero sí de muchas. Lo único que queda hacer es usarla para hacer algo chingón. 
+The good news is that the hardest part is already done. The [Spotify API](https://developer.spotify.com/documentation/web-api/reference/) has an analysis for all (most?) of its songs. We only need to use it to create something cool.
 
-Este proyecto nació como una modificación a kaleidosync, sin embargo evolucionó lo suficiente como para ser un ejercicio con **[React](https://reactjs.org/)** y **[ThreeJS](https://threejs.org/)** de frontend y **[NodeJS](https://nodejs.org/en/download/)** en el backend. Como aprendí varias cosas en el camino, las comparto. 
+This project was born as a mod to kaleidosync but in time it grew enough to stand on its own. It's an exercise on **[React](https://reactjs.org/)** and **[ThreeJS](https://threejs.org/)** in the frontend and **[NodeJS](https://nodejs.org/en/download/)** in the backend. I learned a lot of things on the way so I'll share them.
 
-**_Si no sabes que es React, ThreeJS o NodeJS te recomiendo que primero leas al respecto porque en el texto asumo que sabes al menos las bases de cada uno._**
 
-Si ya te la sabes o sólo quieres ver el código puedes ir a [mi Github](https://github.com/dariozubi/spotify-visualizer) y ahí encontrarás el proyecto completo.
+**_If you don't know anything about React, ThreeJS or NodeJS I recommend you check them out first. This text assumes you know at least the basics._**
+
+If you already know how to code and don't mind the details you can go to my [Github](https://github.com/dariozubi/spotify-visualizer) to find the whole app.
 
 ## React
 
-La base de la aplicación está hecha con [create-react-app (CRA)](https://github.com/facebook/create-react-app). Como lo indican en su página, solo basta tener instalado NodeJS y correr en una terminal el siguiente comando:
+The base of the app uses [create-react-app (CRA)](https://github.com/facebook/create-react-app). As stated in the page, you need to install NodeJS and run this command to start:
 
 `
 npx create-react-app spotify-visualizer
 `
+I named it `spotify-visualizer` but you can choose any name. The folder with this name has all the basic files for the project. All commands that start with `npm` must run from this folder.
 
-Yo le puse `spotify-visualizer` de nombre pero puedes usar el que sea. La carpeta con este nombre contiene todos los archivos básicos para el proyecto. Todos los comandos que empiecen por `npm` de ahora en adelante tienen que correrse desde adentro de esa carpeta.
-
-Por default, CRA crea un _service worker_ para tu aplicación. Como no lo vamos a usar puedes borrarlo. Para hacerlo sólo cambia el contenido del archivo `src/index.js` por:
+By default, CRA creates a _service worker_ for your app. Since we are not going to use it you can delete it. To do that, replace the content of `src/index.js` to:
 
 ```
 src/index.js
@@ -40,9 +39,9 @@ ReactDOM.render(<App />, document.getElementById('root'));
 
 ## API de Spotify
 
-Para poder hacer uso de los datos de Spotify, se necesita primero hacer una aplicación en su [Dashboard](https://developer.spotify.com/dashboard/). Sólo sigue las indicaciones que te den en la página y una vez creada la aplicación agrega `http://localhost:8001/callback` a los _Redirect URIs_.
+To use Spotify data you need to create an app in its [Dashboard](https://developer.spotify.com/dashboard/) first. Follow the indications and once you created the app add `http://localhost:8001/callback` to the _Redirect URIs_. 
 
-Spotify genera un ID y llave secreta de la aplicación que acabas de crear. Vamos a guardarlas en un archivo con el nombre `.env` en la base de tu aplicación. El nombre del archivo (`.env`, de _environment_) es importante porque más adelante un paquete va a usarlo.
+Spotify generates an ID and secret key for the app you created. We are going to save that in a file called `.env` in the base folder. The name is important because a package is going to use it later.
 
 ```
 .env
@@ -58,19 +57,19 @@ access_token = 'DAZUMA_ACCESS_TOKEN'
 refresh_token = 'DAZUMA_REFRESH_TOKEN'
 ```
 
-Estas credenciales nos van a ayudar a conectarnos con Spotify. No podemos usar estas credenciales en el lado del cliente por seguridad. Por lo tanto, necesitamos hacer cambios al servidor para que la autorización se lleve a cabo.
+These credentials will help us connect to Spotify. We cannot use them on the client's side for security. Then, we have to change the server to do the authorization process.
 
 ## NodeJS
 
-Hay que modificar el servidor que usa CRA por defecto para poder conectarse a la API. Para ello vamos a usar varios paquetes que nos ayuden a simplificar el proceso. Usamos el flag `--save-dev` para que los módulos que se instalen se hagan únicamente del lado del servidor y no en el frontend:
+We have to modify the default CRA server to connect to the API. For that we are going to use some packages that are going to help simplify the process. We use the `--save-dev` flag to install the modules only in the backend:
 
 `
 npm install body-parser cookie-parser express node-env-run npm-run-all --save-dev
 `
 
-Vas a ver las diferencias en el archivo `package.json` donde deben aparecer estas nuevas dependencias bajo el nombre `devDependencies`. 
+You should see the changes in the `package.json` file under `devDependencies`.  
 
-Vamos a seguir el [flujo de autorización](https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow) de la API. Para ello vamos a agregar un segundo servidor (además del de CRA). Primero, vamos cambiar los _scripts_ por defecto de CRA y a agregar un _proxy_ para el segundo servidor. Cambia el archivo `package.json` quitando el objeto `scripts` reemplazándolo por:
+We are going to follow the [authorization flow](https://developer.spotify.com/documentation/general/guides/authorization-guide/#authorization-code-flow) of the API. To do that we are going to add a second server (besides the CRA). First, we are going to change the default scripts of CRA and add a proxy for the second server. Change the `package.json`  file by removing the `scripts` object and replacing it with: 
 
 ```
 package.json
@@ -82,11 +81,11 @@ package.json
 "proxy": "http://localhost:8001",
 ```
 
-Nota como también añadimos el objeto `proxy` apuntando a `http://localhost:8001`.
+Notice how we also added a `proxy` object pointing to 
 
-En el `script` _start_ estamos usando el comando `run-p` del paquete `npm-run-all` para correr simultáneamente el servidor de CRA y el nuestro (llamado _server_). Nuestro servidor usa el archivo `.env` (creado en la sección anterior) por medio del paquete `node-env-run`.
+In the _start_ `script` we are using the `run-p` command from the `npm-run-all` package to run the CRA server and ours (called _server_) at the same time. Our server also uses the `.env` file (from the previous section) with the `node-env-run` package.
 
-Ahora ya podemos crear la lógica de nuestro servidor. Primero crea una carpeta llamada `server` con un archivo llamado `index.js` con este contenido:
+Now is time to create the logic for our server. First, create a folder called `server` with a file called `index.js` and add this:
 
 ```
 server/index.js
@@ -190,20 +189,19 @@ app.listen(8001, () =>
 );
 ```
 
-Los detalles están en el código, pero lo importante es entender el proceso:
-- Empezamos en `http://localhost:8001/login`. Aquí el usuario se va a autenticar con Spotify usando sus credenciales. 
-- El usuario debe de permitirnos accesso a su cuenta.
-- Solicitamos a Spotify tokens de acceso. Vamos a usarlos para que el usuario no vuelva a conectarse cada que regresa a la página.
-- Spotify nos regresa a `http://localhost:8001/callback`. Configuramos esto en el Dashboard en la segunda sección.
-- Guardamos los tokens en _cookies_ y ahora ya podemos pedir información a la API.
-- Vamos a `http://localhost:8000/#start` para comenzar la aplicación.
+You can see the details in the code, but the important part is the flow:
+- We start at `http://localhost:8001/login`. The user authenticates with Spotify using its credentials.
+- The user needs to allow our application to use their info.
+- We request Spotify for the access and refresh tokens. We will use these tokens so the user doesn't have to authenticate again.
+- Spotify sends us back to `http://localhost:8001/callback`. We told them in the Dashboard configuration in the second section.
+- We save the tokens in cookies and we can now ask for information to the API.
+- We go to `http://localhost:8000/#start` to start the visuals.
 
-Algunos de estos pasos se complementan con el lado del cliente que veremos a continuación.
+Some of these steps are on the client-side that we'll see in the next section.
 
 ## Frontend
 
-Ya que el servidor se puede conectar con la API es momento de cambiar la aplicación por defecto de React.
-Dado que estamos usando _cookies_ para los tokens, necesitamos código que las lea. Crea la carpeta `src/components` con un archivo llamado `cookie.js` con lo siguiente:
+Now that the server can connect with the API we are going to change the default React app. Since we are using cookies for the tokens, we need code to read them. Create the folder `/src/components` with a file called `cookie.js` and add this:
 
 ```
 src/components/cookie.js
@@ -257,30 +255,30 @@ export function keys () {
 }
 ```
 
-Después creamos un componente _renderless_ para manejar los llamados al API. En la carpeta `/src/components` crea el archivo `APIHandler.js` con este contenido:
+Then, we create a renderless component to handle the requests. In the folder `/src/components` create a file called `APIHandler.js` with this content:
 
 ```
-src/components/APIHandler.js
+/src/components/APIHandler.js
 import { Component } from 'react';
 import * as cookie from './cookie';
 
  export default class ApiHandler extends Component{
 
   constructor(props){
-  	super(props);
+    super(props);
 
-  	this.state = {
+    this.state = {
       track: {},
       track_analysis: {},
       track_progress: 0,
-  	  headers: {},
+      headers: {},
       refresh_token: '',
       last_update: 0,
       section: -1,
       tatum: -1
-  	}
+    }
 
-  	this.setActive = this.setActive.bind(this);
+    this.setActive = this.setActive.bind(this);
     this.setTrack = this.setTrack.bind(this);
   }
 
@@ -553,27 +551,24 @@ import * as cookie from './cookie';
 
 }
 ```
+First, we check if we have the cookies with the authorization tokens. If not we do the authorization flow. Once we have the tokens we make the request to the API about the track. We do this on the `getTrackData` method. Here is where you can get a lot more info than frequency and amplitude.
 
-Primero checamos que tengamos los tokens en las cookies. Si no los tenemos hacemos el flujo de autorización. Ya que los tenemos preguntamos a la API acerca de la canción que se está escuchando. Esto se hace en el método `getTrackData`. Aquí es donde podemos obtener mucha más información que sólo frecuencia y amplitud.
+> ***Since we connected to Spotify's server we can:***
+> - ***Listen to the music in a Bluetooth stereo***
+> - ***Change the songs on our phone***
+> - ***See some pretty visuals in our computer***
 
-> ***Como estamos conectados al servidor de Spotify podemos:***
-> - *** Escuchar música en unas bocinas Bluetooth***
-> - *** Cambiar las canciones con nuestro teléfono***
-> - *** Ver visuales en nuestra computadora***
+In this case, we are only using rhythm information. But there is more info you [can](https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-analysis/) [use](https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-features/) on each track.
 
-En este caso sólo estamos usando la información del ritmo , pero hay más información que se [puede](https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-analysis/) [utilizar](https://developer.spotify.com/documentation/web-api/reference/tracks/get-audio-features/) de la canción. 
+## Visuals
 
-
-
-## Visuales
-
-Ahora sí, lo divertido. Para generar los visuales vamos a usar una de las librerías más populares para usar WebGL: ThreeJS. Como nuestra aplicación está hecha en React necesitamos también de una librería que conecte Three con React. Esa librería es [`react-three-fiber`](https://github.com/react-spring/react-three-fiber). Para este ejemplo vamos a usar también [`react-spring`](https://www.react-spring.io/) para facilitar las animaciones. Como todas estas librerías se van a correr en el frontend, para instalarlas sólo necesitamos usar:
+Now to the fun part. We are going to use one of the most popular WebGL libraries: ThreeJS. Since we are using the React libraries is better to use something to connect both. The best way to do it is by using [`react-three-fiber`](https://github.com/react-spring/react-three-fiber). In this example, we are also going to use [`react-spring`](https://www.react-spring.io/) for the animations. Both these libraries are going to be in CRA part of our app so to install them we use:
 
 `
 npm install three react-three-fiber react-spring
 `
 
-Ya tenemos casi todo lo que se necesita para hacer un visual audioreactivo. En este ejemplo verás una escena 3D muy básica. Muestra los diferentes tipos de ritmos de la API cambiando el tamaño de unas piedras. Para usarlo, copia y pega el código en un archivo llamado `Scene.js` en la carpeta `src/components`.
+We have almost everything we need to create an audio-reactive visual. This example shows a very basic 3D scene. It shows different types of rhythms the API uses by changing the size of each pebble. To use it copy and paste it in a file called `Scene.js` inside the `src/components` folder.
 
 ```
 src/components/Scene.js
@@ -754,17 +749,17 @@ export default function DodecahedronScene(props) {
 }
 ```
 
-## Script principal
+## Main Script
 
-Ya tenemos el backend que nos da la información de la canción que escuchamos y el frontend que muestra esta información con visuales. Lo único que queda es unirlos.
+We have the backend with the track info and the frontend with some visuals. The only thing left is to put them together.
 
-El script principal va a manejar el _estado_ de la aplicación. Vamos a definirlo con dos valores: `active` y `track`. El primero nos dice si hay alguna canción sonando en ese momento. El segundo tiene toda la información de la canción que esté sonando.
+The main script is going to handle the state of the app. We are going to define it with two values: `active` and `track`. Active is going to tell us if there is currently a song playing. Track is going to give us the information about the song.
 
-El componente `APIHandler` necesita de dos _callbacks_ dentro de sus _propiedades_, `setActive` y `setTrack` para poder cambiar el _estado_.
+The `APIHandler` component needs the two callbacks (`setActive` and `setTrack`) to change the state.
 
-El componente que crea los visuales (`DodecahedronScene`) necesita saber el _estado_ de la canción (`active` y `track`) para mostrar lo que se está escuchando.
+The `DodecahedronScene` needs to know the state (`active` and `track`) to make the changes.
 
-Al final, el script `App.js` en la carpeta `src` debe de quedar así:
+The final script `App.js` in the folder `src` looks like:
 
 ```
 src/App.js
@@ -817,7 +812,7 @@ default class App extends Component{
 }
 ```
 
-Por último, necesitamos hacer unos cambios al CSS. Cambia el contenido de `App.css` en la carpeta `src` por:
+Finally, we need to make some adjustments to the CSS. Change the file `App.css` in the `src` folder to:
 
 ```
 src/App.css
@@ -871,15 +866,17 @@ canvas {
 }
 ```
 
-Si todo funciona como debería:
-- Corre `npm run start` en tu terminal
-- Ve a `http://localhost:8000` en tu navegador
-- Conectate a tu cuenta de Spotify
-- Pon una canción en Spotify
-- Ve a unos dodecahedros moverse
+If everything works, you should be able to:
+- Run `npm run start` in a terminal
+- Go to `http://localhost:8000` in your browser
+- Connect to your Spotify account
+- Play a song in Spotify
+- See some dodecahedrons move
 
-## ...¿y ahora?
+## Now what
 
-Este ejemplo es muy sencillo y sólo usa algunos de los parámetros que tiene Spotify en su análisis de las canciones. Además, `react-three-fiber` y ThreeJS te permiten hacer prácticamente lo que quieras en 3D. Lo único que queda es experimentar y ¡compartirlo!
+This is a very simple example of what you can do. Go and see the [`react-three-fiber`](https://github.com/react-spring/react-three-fiber) docs and build your own visuals. Have fun!
 
-Si tienes alguna duda, comentario, chiste, insulto original o buen albur escríbeme a a mi [correo](mailto:dariozubi@gmail.com).
+English is not my first language so I apologize for any mistake in the text. Doubts? Comments? Jokes? Insults? Write me an [email](mailto:dario@dazu.ma).
+
+(This post is also in [Spanish.](/blog/visuales-audioreactivos-con-musica-de-spotify))

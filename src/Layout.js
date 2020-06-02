@@ -143,7 +143,7 @@ export default function ResponsiveDrawer(props) {
               keepMounted: true, // Better open performance on mobile.
             }}
           >
-            <Banner language={router.pathname.substring(1,3)}/>
+            <Banner language={router.pathname === '/' ? 'es' : router.pathname.substring(1,3)}/>
           </Drawer>
         </Hidden>
 
@@ -155,7 +155,7 @@ export default function ResponsiveDrawer(props) {
             variant="permanent"
             open
           >
-            <Banner language={router.pathname.substring(1,3)}/>
+            <Banner language={router.pathname === '/' ? 'es' : router.pathname.substring(1,3)}/>
           </Drawer>
         </Hidden>
 

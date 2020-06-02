@@ -40,5 +40,5 @@ export default function Index(props) {
 }
 
 Index.getInitialProps = async function(context) {
-  return require.context('../../src/text/blog', true, /\.mdx$/)
+  return require.context('../../src/text/es/blog', true, /\.mdx$/)
 }

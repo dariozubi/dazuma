@@ -1,6 +1,6 @@
 import React, { Suspense, useRef, useMemo, useState, useEffect } from 'react';
-import { useRouter } from 'next/router'
-import Link from 'next/link'
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 import { Canvas, extend, useThree, useFrame, useLoader } from 'react-three-fiber';
 import { useSpring, config } from 'react-spring';
@@ -95,7 +95,6 @@ function Model({ layer = DEFAULT_LAYER, type }) {
     </group>
   )
 }
-
 
 function Effects({ type }) {
   const composer = useRef()
@@ -203,7 +202,7 @@ const Demo = ({ track }) => {
 
       <div className={styles.flex}>
 
-        <Link href={router.pathname !== '' ? 'en/work#Web' : 'es/trabajo#Web'}>
+        <Link href={router.pathname !== '/' ? 'en/work#Web' : 'es/trabajo#Web'}>
           <div 
             className={styles.text}
             onMouseOver={()=>set(1)} 
@@ -212,7 +211,7 @@ const Demo = ({ track }) => {
           </div>
         </Link>
 
-        <Link href={router.pathname !== '' ? 'en/work#Multimedia' : 'es/trabajo#Multimedia'}>
+        <Link href={router.pathname !== '/' ? 'en/work#Multimedia' : 'es/trabajo#Multimedia'}>
           <div 
             className={styles.text} 
             onMouseOver={()=>set(3)} 
@@ -221,7 +220,7 @@ const Demo = ({ track }) => {
           </div>
         </Link>
 
-        <Link href={router.pathname !== '' ? 'en/work#VR' : 'es/trabajo#VR'}>
+        <Link href={router.pathname !== '/' ? 'en/work#VR' : 'es/trabajo#VR'}>
           <div 
             className={styles.text} 
             onMouseOver={()=>set(2)} 
@@ -230,7 +229,7 @@ const Demo = ({ track }) => {
           </div>
         </Link>
 
-        <Link href={router.pathname !== '' ? 'en/work#More' : 'es/trabajo#More'}>
+        <Link href={router.pathname !== '/' ? 'en/work#More' : 'es/trabajo#More'}>
           <div 
             className={styles.text} 
             onMouseOver={()=>set(4)} 

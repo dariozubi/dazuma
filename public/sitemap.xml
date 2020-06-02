@@ -33,24 +33,14 @@
   </url>
 
   <url>
+    <loc>https://dazu.ma/en/work/CPS</loc>
+  </url>
+
+  <url>
     <loc>https://dazu.ma/es/blog/[slug]</loc>
   </url>
 
   <url>
-    <loc>https://dazu.ma/en/blog/audio-reactive-visuals-with-spotify</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/en/blog/initial-post</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/es/blog/mi-primer-post</loc>
-  </url>
-
-  <url>
-    <loc
-      >https://dazu.ma/es/blog/visuales-audioreactivos-con-musica-de-spotify</loc
-    >
+    <loc>https://dazu.ma/es/trabajo/CPS</loc>
   </url>
 </urlset>

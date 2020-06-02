@@ -1,7 +1,7 @@
 import Box from '@material-ui/core/Box';
 
 import Layout from '../../src/Layout';
-import Semblanza from "../../src/text/semblanza.md"
+import Semblanza from "../../src/text/es/semblanza.md"
 
 export default function Index() {
   return (

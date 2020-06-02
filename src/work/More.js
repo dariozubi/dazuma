@@ -10,7 +10,11 @@ import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
 
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+
 import SUMO from '../images/sumo.jpg';
+import CPS from '../images/cps.jpg';
 
 const useStyles = makeStyles(theme => ({
   media: {
@@ -25,6 +29,8 @@ const useStyles = makeStyles(theme => ({
 
 export default function More(){
   const classes = useStyles();
+  const router = useRouter();
+
 	return(
 		<Grid container spacing={2} className={classes.container}>
 
@@ -46,6 +52,23 @@ export default function More(){
               title="SUMO"
             />
           </CardActionArea>
+        </Card>
+      </Grid>
+
+      <Grid item lg={3} xs={6}>
+        <Card>
+          <Link href={router.pathname + '/CPS'}>
+          <CardActionArea>
+            <CardHeader
+              subheader="CPS"
+            />
+            <CardMedia
+              className={classes.media}
+              image={CPS}
+              title="CPS"
+            />
+          </CardActionArea>
+          </Link>
         </Card>
       </Grid>
       
