@@ -4,17 +4,13 @@ import Card from '@material-ui/core/Card';
 import CardActionArea from '@material-ui/core/CardActionArea';
 import CardHeader from '@material-ui/core/CardHeader';
 import CardMedia from '@material-ui/core/CardMedia';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 import Divider from '@material-ui/core/Divider';
 
-import Link from 'next/link';
-import { useRouter } from 'next/router';
-
-import SUMO from '../images/sumo.jpg';
-import CPS from '../images/cps.jpg';
+import dazuma from '../../images/dazuma.jpg';
+import hoxa from '../../images/hoxa.jpg';
+import pame from '../../images/pame.jpg';
 
 const useStyles = makeStyles(theme => ({
   media: {
@@ -27,29 +23,27 @@ const useStyles = makeStyles(theme => ({
 }));
 
 
-export default function More(){
+export default function Web(){
   const classes = useStyles();
-  const router = useRouter();
-
 	return(
 		<Grid container spacing={2} className={classes.container}>
 
       <Grid item xs={12}>
         <Typography variant="h4" component="h1" gutterBottom>
-          More
+          Web
         </Typography>
       </Grid>
 
       <Grid item lg={3} xs={6}>
         <Card>
-          <CardActionArea href="https://www.youtube.com/watch?v=SoZHHuJWSnw" target="_blank" rel="noopener">
+          <CardActionArea href="/" target="_blank" rel="noopener">
             <CardHeader
-              subheader="SUMO"
+              subheader="dazuma"
             />
             <CardMedia
               className={classes.media}
-              image={SUMO}
-              title="SUMO"
+              image={dazuma}
+              title="dazuma"
             />
           </CardActionArea>
         </Card>
@@ -57,21 +51,34 @@ export default function More(){
 
       <Grid item lg={3} xs={6}>
         <Card>
-          <Link href={router.pathname + '/CPS'}>
-          <CardActionArea>
+          <CardActionArea href="https://hoxa.mx/" target="_blank" rel="noopener">
             <CardHeader
-              subheader="CPS"
+              subheader="Hoxa"
             />
             <CardMedia
               className={classes.media}
-              image={CPS}
-              title="CPS"
+              image={hoxa}
+              title="HOXA"
             />
           </CardActionArea>
-          </Link>
         </Card>
       </Grid>
-      
+
+      <Grid item lg={3} xs={6}>
+        <Card>
+          <CardActionArea href="http://pamelazubillaga.com/" target="_blank" rel="noopener">
+            <CardHeader
+              subheader="pamelazubillaga"
+            />
+            <CardMedia
+              className={classes.media}
+              image={pame}
+              title="pame"
+            />
+          </CardActionArea>
+        </Card>
+      </Grid>
+
     </Grid>
 	)
 }

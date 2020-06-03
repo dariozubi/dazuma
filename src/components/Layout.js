@@ -1,8 +1,9 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+
 import { useRouter } from 'next/router'
 import Head from 'next/head'
 
+import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Divider from '@material-ui/core/Divider';
@@ -15,7 +16,7 @@ import Box from '@material-ui/core/Box';
 import MenuIcon from '@material-ui/icons/Menu';
 
 import Banner from './Banner';
-import dazuma from './images/dzm.svg'; // >=1200px×630px 1.91:1 <1MB
+import dazuma from '../images/dzm.svg'; // >=1200px×630px 1.91:1 <1MB
 
 
 export function recursiveCloneChildren(children){
@@ -74,7 +75,7 @@ export default function ResponsiveDrawer(props) {
   const handleENClick = (e) => {
     e.preventDefault()
     if (router.pathname.substring(1,4) != 'en/'){
-      if (router.pathname === '/es/trabajo') router.push('/en/work');
+      if (router.pathname.match(/\/es\/trabajo/)) router.push(router.pathname.replace('es/trabajo', 'en/work'));
       else router.push('/en'+router.pathname.substring(3));
     }
   }
@@ -82,7 +83,7 @@ export default function ResponsiveDrawer(props) {
   const handleESClick = (e) => {
     e.preventDefault()
     if (router.pathname.substring(1,3) == 'en'){
-      if (router.pathname === '/en/work') router.push('/es/trabajo');
+      if (router.pathname.match(/\/en\/work/)) router.push(router.pathname.replace('en/work', 'es/trabajo'));
       else if (router.pathname === '/en') router.push('/');
       else router.push('/es'+router.pathname.substring(3));
     }
@@ -109,7 +110,7 @@ export default function ResponsiveDrawer(props) {
         
       </Head>
 
-      <AppBar position="fixed" className={classes.appBar}>
+      {!router.pathname.match(/[(es)(en)]\/blog\/.+/) && <AppBar position="fixed" className={classes.appBar}>
 
         <Toolbar>
 
@@ -127,7 +128,7 @@ export default function ResponsiveDrawer(props) {
 
         </Toolbar>
 
-      </AppBar>
+      </AppBar>}
 
       <nav className={classes.drawer}>
 

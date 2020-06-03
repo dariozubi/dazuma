@@ -5,8 +5,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
 import Box from '@material-ui/core/Box';
 
-import Layout from '../../src/Layout';
-import { getPosts } from '../../src/blog/content_en'
+import Layout from '../../src/components/Layout';
+import { getPosts } from '../../src/components/blog/content_en'
 
 export default function Index(props) {
   return (

@@ -5,9 +5,9 @@ import { MDXProvider } from '@mdx-js/react'
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
-import { getPost } from '../../../src/blog/content_en'
-import Code from '../../../src/Code';
-import Layout from '../../../src/Layout';
+import { getPost } from '../../../src/components/blog/content_en'
+import Code from '../../../src/components/blog/Code';
+import Layout from '../../../src/components/Layout';
 
 const components ={
   code: Code
@@ -17,7 +17,7 @@ function Post({ post }){
   const Content = post.Doc;
 
   return(
-    <Box mx={8} my={12}>
+    <Box mx={8} my={4}>
       <Typography variant="h4" component="h1" gutterBottom>
         {post.title}
       </Typography>

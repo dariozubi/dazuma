@@ -17,7 +17,7 @@ import InfoIcon from '@material-ui/icons/Info';
 import ChatIcon from '@material-ui/icons/Chat';
 import PermMediaIcon from '@material-ui/icons/PermMedia';
 
-import logo from './images/dzm.svg';
+import logo from '../images/dzm.svg';
 
 export default function Banner({ language }){
   

@@ -7,7 +7,7 @@ import CardActionArea from '@material-ui/core/CardActionArea';
 import CardMedia from '@material-ui/core/CardMedia';
 import { makeStyles } from '@material-ui/core/styles';
 
-import Layout from '../../../src/Layout';
+import Layout from '../../../src/components/Layout';
 import cps from '../../../src/images/cps.jpg';
 import cps1 from '../../../src/images/cps1.jpg';
 import cps2 from '../../../src/images/cps2.jpg';

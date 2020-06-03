@@ -1,9 +1,10 @@
-import Layout from '../../src/Layout';
-import Web from '../../src/work/Web';
-import VR from '../../src/work/VR';
-import Multimedia from '../../src/work/Multimedia';
-import More from '../../src/work/More';
 import Box from '@material-ui/core/Box';
+
+import Layout from '../../src/components/Layout';
+import Web from '../../src/components/work/Web';
+import VR from '../../src/components/work/VR';
+import Multimedia from '../../src/components/work/Multimedia';
+import More from '../../src/components/work/More';
 
 export default function Work(){
   return(

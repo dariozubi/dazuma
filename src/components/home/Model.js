@@ -20,6 +20,11 @@ import { GlitchPass } from './GlitchPass'
 import { AdditiveBlendingShader, VolumetricLightShader } from './shaders';
 
 import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import CardActionArea from '@material-ui/core/CardActionArea';
+import Hidden from '@material-ui/core/Hidden';
+import Box from '@material-ui/core/Box';
 
 extend({ EffectComposer, ShaderPass, RenderPass, DotScreenPass, UnrealBloomPass, FilmPass, GlitchPass })
 
@@ -36,7 +41,7 @@ const useStyles = makeStyles(theme => ({
     overflow: 'auto'
   },
 
-  root: {
+  base: {
     width: '100%',
     height: '100%',
     margin: '0',
@@ -55,6 +60,11 @@ const useStyles = makeStyles(theme => ({
     }
   },
 
+  root: {
+    backgroundColor: '#fff0',
+    color: '#343d46'
+  },
+
   flex: {
     color: '#343d46',
     marginTop: '64px',
@@ -62,7 +72,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     flexFlow: 'row wrap',
     alignContent: 'space-around',
-    height: 'calc(100vh - 64px)'
+    height: 'calc(90vh - 64px)'
   }
 }));
 
@@ -177,7 +187,7 @@ const Demo = ({ track }) => {
       <div className={styles.container}>
 
         <Canvas 
-          className={styles.root}
+          className={styles.base}
           camera={{ position: [0, -2, 15] }}
           gl={{ antialias: false }}
           onCreated={({ gl }) => {
@@ -202,41 +212,173 @@ const Demo = ({ track }) => {
 
       <div className={styles.flex}>
 
-        <Link href={router.pathname !== '/' ? 'en/work#Web' : 'es/trabajo#Web'}>
-          <div 
-            className={styles.text}
-            onMouseOver={()=>set(1)} 
-            onMouseLeave={()=>set(0)}>
-            Web
-          </div>
-        </Link>
+        <Box
+          mt={8} 
+          width="100%"
+        >
+          <Hidden smUp implementation="css">
+            <Card 
+              elevation={0} 
+              className={styles.root}
+              onClick={()=>set(1)} 
+              onDoubleClick={()=>router.push(router.pathname !== '/' ? '/en/work#Web' : '/es/trabajo#Web')}
+            >
+              <CardActionArea>
+                <CardContent>
+                  <Box fontSize="h2.fontSize">
+                    Web
+                  </Box>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          </Hidden>
 
-        <Link href={router.pathname !== '/' ? 'en/work#Multimedia' : 'es/trabajo#Multimedia'}>
-          <div 
-            className={styles.text} 
-            onMouseOver={()=>set(3)} 
-            onMouseLeave={()=>set(0)}>
-            Multimedia
-          </div>
-        </Link>
+          <Hidden xsDown implementation="css">
+            <Link href={router.pathname !== '/' ? 'en/work#Web' : 'es/trabajo#Web'}>
+              <Card 
+                elevation={0} 
+                className={styles.root}
+                onMouseOver={()=>set(1)} 
+                onMouseLeave={()=>set(0)}
+              >
+                <CardActionArea>
+                  <CardContent>
+                    <Box fontSize="h2.fontSize">
+                      Web
+                    </Box>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Link>
+          </Hidden>
 
-        <Link href={router.pathname !== '/' ? 'en/work#VR' : 'es/trabajo#VR'}>
-          <div 
-            className={styles.text} 
-            onMouseOver={()=>set(2)} 
-            onMouseLeave={()=>set(0)}>
-            VR
-          </div>
-        </Link>
+        </Box>
 
-        <Link href={router.pathname !== '/' ? 'en/work#More' : 'es/trabajo#More'}>
-          <div 
-            className={styles.text} 
-            onMouseOver={()=>set(4)} 
-            onMouseLeave={()=>set(0)}>
-            {router.pathname !== '/' ? 'More' : 'Más'}
-          </div>
-        </Link>
+        <Box
+          mt={8} 
+          width="100%"
+        >
+          <Hidden smUp implementation="css">
+            <Card 
+              elevation={0} 
+              className={styles.root}
+              onClick={()=>set(3)} 
+              onDoubleClick={()=>router.push(router.pathname !== '/' ? '/en/work#Multimedia' : '/es/trabajo#Multimedia')}
+            >
+              <CardActionArea>
+                <CardContent>
+                  <Box fontSize="h2.fontSize">
+                    Multimedia
+                  </Box>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          </Hidden>
+
+          <Hidden xsDown implementation="css">
+            <Link href={router.pathname !== '/' ? 'en/work#Multimedia' : 'es/trabajo#Multimedia'}>
+              <Card 
+                elevation={0} 
+                className={styles.root}
+                onMouseOver={()=>set(3)} 
+                onMouseLeave={()=>set(0)}
+              >
+                <CardActionArea>
+                  <CardContent>
+                    <Box fontSize="h2.fontSize">
+                      Multimedia
+                    </Box>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Link>
+          </Hidden>
+          
+        </Box>
+
+        <Box
+          mt={8} 
+          width="100%"
+        >
+          <Hidden smUp implementation="css">
+            <Card 
+              elevation={0} 
+              className={styles.root}
+              onClick={()=>set(2)} 
+              onDoubleClick={()=>router.push(router.pathname !== '/' ? '/en/work#VR' : '/es/trabajo#VR')}
+            >
+              <CardActionArea>
+                <CardContent>
+                  <Box fontSize="h2.fontSize">
+                    VR
+                  </Box>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          </Hidden>
+
+          <Hidden xsDown implementation="css">
+            <Link href={router.pathname !== '/' ? 'en/work#VR' : 'es/trabajo#VR'}>
+              <Card 
+                elevation={0} 
+                className={styles.root}
+                onMouseOver={()=>set(2)} 
+                onMouseLeave={()=>set(0)}
+              >
+                <CardActionArea>
+                  <CardContent>
+                    <Box fontSize="h2.fontSize">
+                      VR
+                    </Box>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Link>
+          </Hidden>
+          
+        </Box>
+
+        <Box
+          mt={8} 
+          width="100%"
+        >
+          <Hidden smUp implementation="css">
+            <Card 
+              elevation={0} 
+              className={styles.root}
+              onClick={()=>set(4)} 
+              onDoubleClick={()=>router.push(router.pathname !== '/' ? '/en/work#More' : '/es/trabajo#More')}
+            >
+              <CardActionArea>
+                <CardContent>
+                  <Box fontSize="h2.fontSize">
+                    More
+                  </Box>
+                </CardContent>
+              </CardActionArea>
+            </Card>
+          </Hidden>
+
+          <Hidden xsDown implementation="css">
+            <Link href={router.pathname !== '/' ? 'en/work#More' : 'es/trabajo#More'}>
+              <Card 
+                elevation={0} 
+                className={styles.root}
+                onMouseOver={()=>set(4)} 
+                onMouseLeave={()=>set(0)}
+              >
+                <CardActionArea>
+                  <CardContent>
+                    <Box fontSize="h2.fontSize">
+                      More
+                    </Box>
+                  </CardContent>
+                </CardActionArea>
+              </Card>
+            </Link>
+          </Hidden>
+          
+        </Box>
 
       </div>
     </React.Fragment>
