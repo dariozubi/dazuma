@@ -1,5 +1,5 @@
-import Layout from '../src/components/Layout';
-import Model from '../src/components/home/Model';
+import Layout from '../src/util/Layout';
+import Model from '../src/home/Model';
 
 export default function Index() {
   return (

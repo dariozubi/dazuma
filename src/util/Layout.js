@@ -16,7 +16,7 @@ import Box from '@material-ui/core/Box';
 import MenuIcon from '@material-ui/icons/Menu';
 
 import Banner from './Banner';
-import dazuma from '../images/dzm.svg'; // >=1200px×630px 1.91:1 <1MB
+import dazuma from '../../images/dzm.svg'; // >=1200px×630px 1.91:1 <1MB
 
 
 export function recursiveCloneChildren(children){
@@ -164,14 +164,8 @@ export default function ResponsiveDrawer(props) {
 
       <main className={classes.content}>
 
-        <Hidden smUp implementation="css">
-          {elements}
-        </Hidden>
+        {elements}
 
-        <Hidden xsDown implementation="css">
-          {elements}
-        </Hidden>
-        
       </main>
     </div>
   );

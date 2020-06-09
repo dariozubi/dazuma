@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import Link from 'next/link';
+
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
 import IconButton from '@material-ui/core/IconButton';
@@ -17,20 +19,22 @@ import InfoIcon from '@material-ui/icons/Info';
 import ChatIcon from '@material-ui/icons/Chat';
 import PermMediaIcon from '@material-ui/icons/PermMedia';
 
-import logo from '../images/dzm.svg';
+import logo from '../../images/dzm.svg';
 
 export default function Banner({ language }){
   
   return(
     <div>
-      <ButtonBase
-        focusRipple
-        href={language === 'es' ? '/' : '/en'}
-      >
-        <Box mx={4} mt={4} mb={2}>
-          <img src={logo} width="100%"/>
-        </Box>
-      </ButtonBase>
+      <Link href={language === 'es' ? '/' : '/en'}>
+        <ButtonBase
+          focusRipple
+          
+        >
+          <Box mx={4} mt={4} mb={2}>
+            <img src={logo} width="100%"/>
+          </Box>
+        </ButtonBase>
+      </Link>
 
         <Box mb={3} textAlign="center" fontWeight="fontWeightLight" fontSize="h4.fontSize">
           Darío Zubillaga
@@ -42,18 +46,24 @@ export default function Banner({ language }){
       
       <Divider/>
       <List>
-        <ListItem button component="a" key={1} href={'/' + language + '/blog'}>
-          <ListItemIcon><ChatIcon/></ListItemIcon>
-          <ListItemText primary="Blog" />
-        </ListItem>
-        <ListItem button component="a" key={2} href={(language === 'es' ? '/es/trabajo' : '/en/work')}>
-          <ListItemIcon><PermMediaIcon/></ListItemIcon>
-          <ListItemText primary={language === 'es' ? "Trabajo" : 'Work'} />
-        </ListItem>
-        <ListItem button component="a" key={3} href={'/' + language +  '/info'}>
-          <ListItemIcon><InfoIcon/></ListItemIcon>
-          <ListItemText primary="Info" />
-        </ListItem>
+        <Link href={'/' + language + '/blog'}>
+          <ListItem button component="a" key={1}>
+            <ListItemIcon><ChatIcon/></ListItemIcon>
+            <ListItemText primary="Blog" />
+          </ListItem>
+        </Link>
+        <Link href={(language === 'es' ? '/es/trabajo' : '/en/work')}>
+          <ListItem button component="a" key={2}>
+            <ListItemIcon><PermMediaIcon/></ListItemIcon>
+            <ListItemText primary={language === 'es' ? "Trabajo" : 'Work'} />
+          </ListItem>
+        </Link>
+        <Link href={'/' + language +  '/info'}>
+          <ListItem button component="a" key={3}>
+            <ListItemIcon><InfoIcon/></ListItemIcon>
+            <ListItemText primary="Info" />
+          </ListItem>
+        </Link>
       </List>
       <Divider/>
       <Box ml={5} mt={3}>

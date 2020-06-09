@@ -5,9 +5,9 @@ import { MDXProvider } from '@mdx-js/react'
 import Typography from '@material-ui/core/Typography';
 import Box from '@material-ui/core/Box';
 
-import { getPost } from '../../../src/components/blog/content'
-import Code from '../../../src/components/blog/Code';
-import Layout from '../../../src/components/Layout';
+import { getPost } from '../../../src/blog/content'
+import Code from '../../../src/blog/Code';
+import Layout from '../../../src/util/Layout';
 
 const components ={
   code: Code

@@ -1,22 +1,20 @@
-import Box from '@material-ui/core/Box';
+import dynamic from 'next/dynamic'
 
-import Layout from '../../src/components/Layout';
-import Web from '../../src/components/work/Web';
-import VR from '../../src/components/work/VR';
-import Multimedia from '../../src/components/work/Multimedia';
-import More from '../../src/components/work/More';
+import Layout from '../../src/util/Layout';
+
+
+const Projects = dynamic(
+  () => import('../../src/work/Projects'),
+  { ssr: false }
+)
 
 export default function Work(){
   return(
     <Layout
       title="Trabajo"
+      description="Los diferentes proyectos en los que ha trabajado Darío Zubillaga"
     >
-      <Box mt={8} mx={4}>
-        <Web/>
-        <Multimedia/>
-        <VR/>
-        <More/>
-      </Box>
+      <Projects />
     </Layout>
-  );
+  )
 }
