@@ -1,5 +1,4 @@
 import React from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { MDXProvider } from '@mdx-js/react'
 
 import Typography from '@material-ui/core/Typography';

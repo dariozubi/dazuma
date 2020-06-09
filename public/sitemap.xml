@@ -5,6 +5,18 @@
   </url>
 
   <url>
+    <loc>https://dazu.ma/es/blog</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/es/info</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/es/trabajo</loc>
+  </url>
+
+  <url>
     <loc>https://dazu.ma/en/blog</loc>
   </url>
 
@@ -18,70 +30,6 @@
 
   <url>
     <loc>https://dazu.ma/en/work</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/es/blog</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/es/info</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/es/trabajo</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/en/work/argax</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/en/work/CPS</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/en/work/dazuma</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/en/work/givenchy</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/en/work/hoxa</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/en/work/inbursa</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/en/work/mazic</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/en/work/oakley</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/en/work/pamelazubillaga</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/en/work/photobooth</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/en/work/porsche</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/en/work/SUMO</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/en/work/unifin</loc>
   </url>
 
   <url>
@@ -134,5 +82,57 @@
 
   <url>
     <loc>https://dazu.ma/es/trabajo/unifin</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/en/work/argax</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/en/work/CPS</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/en/work/dazuma</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/en/work/givenchy</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/en/work/hoxa</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/en/work/inbursa</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/en/work/mazic</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/en/work/oakley</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/en/work/pamelazubillaga</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/en/work/photobooth</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/en/work/porsche</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/en/work/SUMO</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/en/work/unifin</loc>
   </url>
 </urlset>
