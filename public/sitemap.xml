@@ -5,18 +5,6 @@
   </url>
 
   <url>
-    <loc>https://dazu.ma/es/blog</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/es/info</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/es/trabajo</loc>
-  </url>
-
-  <url>
     <loc>https://dazu.ma/en/blog</loc>
   </url>
 
@@ -33,55 +21,15 @@
   </url>
 
   <url>
-    <loc>https://dazu.ma/es/trabajo/argax</loc>
+    <loc>https://dazu.ma/es/blog</loc>
   </url>
 
   <url>
-    <loc>https://dazu.ma/es/trabajo/CPS</loc>
+    <loc>https://dazu.ma/es/info</loc>
   </url>
 
   <url>
-    <loc>https://dazu.ma/es/trabajo/dazuma</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/es/trabajo/givenchy</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/es/trabajo/hoxa</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/es/trabajo/inbursa</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/es/trabajo/mazic</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/es/trabajo/oakley</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/es/trabajo/pamelazubillaga</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/es/trabajo/photobooth</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/es/trabajo/porsche</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/es/trabajo/SUMO</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/es/trabajo/unifin</loc>
+    <loc>https://dazu.ma/es/trabajo</loc>
   </url>
 
   <url>
@@ -94,6 +42,10 @@
 
   <url>
     <loc>https://dazu.ma/en/work/dazuma</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/en/work/gabrielazubillaga</loc>
   </url>
 
   <url>
@@ -134,5 +86,61 @@
 
   <url>
     <loc>https://dazu.ma/en/work/unifin</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/es/trabajo/argax</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/es/trabajo/CPS</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/es/trabajo/dazuma</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/es/trabajo/gabrielazubillaga</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/es/trabajo/givenchy</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/es/trabajo/hoxa</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/es/trabajo/inbursa</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/es/trabajo/mazic</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/es/trabajo/oakley</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/es/trabajo/pamelazubillaga</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/es/trabajo/photobooth</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/es/trabajo/porsche</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/es/trabajo/SUMO</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/es/trabajo/unifin</loc>
   </url>
 </urlset>
