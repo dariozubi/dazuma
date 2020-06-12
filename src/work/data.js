@@ -12,6 +12,7 @@ import porsche from '../../images/porsche.jpg';
 import sumo from '../../images/sumo-logo.jpg';
 import unifin from '../../images/unifin.jpg';
 import argax from '../../images/argax.jpg';
+import intus from '../../images/intus.jpg';
 
 export default [
 
@@ -90,6 +91,17 @@ export default [
     description: 'VR recreation of an ad',
     descripcion: 'Reacreacion de un comercial en RV',
     link: 'givenchy'
+  },
+
+  {
+    css:
+      'url('+intus+')',
+    height: 350,
+    type: 'vr',
+    title: 'Intus',
+    description: 'Build an engine in VR',
+    descripcion: 'Construye un motor en RV',
+    link: 'intus'
   },
   
   
