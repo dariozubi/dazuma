@@ -1,0 +1,92 @@
+export const data = {
+	title: 'Mi Modelo 3D',
+	date: '2020-06-20',
+	description: 'Cómo hacer un modelo 3D de una persona'
+}
+
+import zephyr from '../../../images/blog/modelo/zephyr.jpg';
+import zephyr2 from '../../../images/blog/modelo/zephyr2.jpg';
+import zephyr3 from '../../../images/blog/modelo/zephyr3.jpg';
+import blender from '../../../images/blog/modelo/blender.jpg';
+import blender2 from '../../../images/blog/modelo/blender2.jpg';
+import blender3 from '../../../images/blog/modelo/blender3.jpg';
+import blender4 from '../../../images/blog/modelo/blender4.jpg';
+import blender5 from '../../../images/blog/modelo/blender5.jpg';
+import blender6 from '../../../images/blog/modelo/blender6.jpg';
+
+La página principal de mi sitio tiene un modelo 3D mío. Hasta hace unos años hacer este tipo de modelos requería de software especializado muy caro o de alguien con muy buenas habilidades para modelado. Sin embargo, hoy en día es relativamente sencillo de hacer con software gratuito. En este post explico cómo hice el mío.
+
+## Herramientas
+
+Existen muchas alternativas para hacer un modelo 3D, pero el software que yo utilicé fue [3D Zephyr](https://www.3dflow.net/3df-zephyr-free/) para el primer modelo y [Blender](https://www.blender.org/) para la reducción en el número de nodos. Los dos son completamente gratuitos para fines personales.
+
+## 3D Zephyr
+
+Esta es una herramienta enfocada a realizar proyectos de fotogrametría, que es una palabra rimbombante para "generar modelos 3D a partir de fotos o video". La versión gratuita de 3D Zephyr sólo permite realizar modelos con máximo 50 fotos. Lo importante es poder captar el modelo desde todos los ángulos para que el programa pueda juntarlos satisfactoriamente. Idealmente debes de tomar las fotos con un fondo neutro para facilitar el proceso. Sin embargo, mientras las fotos estén bien encuadradas en el modelo el resultado puede ser bastante bueno. 
+
+Ya que tengas las fotos y hayas instalado el programa, al abrirlo verás algo similar a esto:
+
+<img src={zephyr} style={{width: '70%', display: 'block', margin: '0 auto'}}/>
+
+Para hacer algo rápido y bastante bueno en el pica en  _Workflow -> New Project_. Esto te conducirá a un wizard para crear tu modelo:
+- El primer paso te da opciones para la Generación del modelo. Checa la opción para generar el modelo 3D y asegúrate de que también esté seleccionado _Check online for precomputed camera calibration_
+- En el segundo es donde podrás importar el video o las fotos. Yo importé las 50 fotos permitidas pero también se puede usar video.
+- El tercer paso te muestra detalles de las fotos que importaste. 
+- Después aparecen tres pantallas que te piden el tipo de opciones que quieres para la cámara, la nube de puntos y la reconstrucción de la superficie. Las opciones generales funcionan bien pero puedes probar con diferentes combinaciones para ver diferentes resultados.
+- Por último aparece una pantalla de confirmación donde el software te dice que fotos utilizó. Al dar click en _Finish_ verás el modelo en un ambiente 3D. Para moverte utiliza el botón izquierdo del mouse para mover el ángulo de la cámara y el del centro (el de scroll) para moverla de un lado a otro en un plano.
+
+<img src={zephyr2} style={{width: '70%', display: 'block', margin: '0 auto'}}/>
+
+Si tu resultado fue similar al mío, podrás notar que el modelo no es perfecto y hay cosas que no deberían estar. En mi caso es la zona que está arriba de mi cabeza la que quiero quitar. 3D Zephyr cuenta con algunas herramientas que nos ayudaran a limpiar el modelo. Pica en  menú _Tools -> Selection -> Manual selection_. Esto abrirá una herramienta que te permite elegir partes del modelo que quieras eliminar. Puedes alternar entre seleccionar y moverte picando en el botón _Pause_/_Resume_. Hay varios métodos de selección en la parte superior de la herramienta. El que más me sirvió a mi es el _Poly_ que te permite generar zonas de selección con polígonos. Debes de tener en cuenta que al estar en un ambiente 3D, las selecciones se harán sobre todos los puntos que estén atras de la zona de selección.  Una vez seleccionadas las partes la puedes eliminar con el botón de suprimir. Procura mover la cámara a otro ángulo antes de borrar para que no borres algo que no quieres. De todas maneras siempre puedes usar `ctrl+Z` para volver al paso anterior.
+
+<img src={zephyr3} style={{width: '70%', display: 'block', margin: '0 auto'}}/>
+
+Una vez que se tiene el modelo hay que crear un mesh texturizado a partir de el. Para eso pica en _Workflow -> Textured Mesh Generation_. Se abrirá otro wizard en el cual puedes elegir las opciones por default. Ahora sí, el modelo está listo para exportar. Para hacerlo sólo pica en _Export_ -> _Export Textured Mesh..._.Elige _obj/mtl_ para poder hacer ediciones aún más finas en Blender.
+
+Si quieres saber con más detalle lo que puedes hacer con 3D Zephyr puedes consultar su [manual](http://3dflow.net/zephyr-doc/3DF%20Zephyr%20Manual%204.500%20English.pdf). 
+
+## Blender
+
+Dependiendo de los parámetros que hayas elegido en 3D Zephyr, el modelo final puede resultar en un archivo relativamente grande. En mi caso fue de aproximadamente 5000kb. Para una página web eso es demasiado así que hay que reducir el tamaño. Para ello puedes usar cualquiera de los muchos editores 3D que hay. La ventaja de Blender es que es Open Source y gratis.
+
+Una vez instalado Blender, al abrirlo te encuentras con una pantalla similar a esta:
+
+<img src={blender} style={{width: '70%', display: 'block', margin: '0 auto'}}/>
+
+Para moverte en el espacio 3D de Blender usa el botón del centro del mouse (scroll) para mover el ángulo de la cámara (como con el botón izquierdo en 3D Zephyr). Para moverte en un plano (como con el botón de scroll en 3D Zephyr) tienes que apretar `shift` mientras aprietas el scroll del mouse.
+
+Para borrar el cubo que está en la escena por default, selecciónalo con el botón izquierdo del mouse y una vez que veas un contorno naranja alrededor del cubo aprieta `supr` y después click en _Delete_. Ya que no tenemos objetos en la escena (más que la cámara y la luz por defecto), hay que importar el modelo. Pica en _File -> Import -> Wavefront(.obj)_ y busca el modelo que guardamos en 3D Zephyr. Una vez importado verás que el modelo está inclinado. Para corregirlo, selecciona el modelo y aprieta la tecla `R` para acomodarlo. 
+
+Ahora, cambia a _Edit mode_ en donde lo muestra la imagen. Notarás que estás en modo edición porque en lugar de ver las caras del modelo vas a ver los nodos que lo componen. 
+
+<img src={blender2} style={{width: '70%', display: 'block', margin: '0 auto'}}/>
+
+Elige uno de los nodos y aprieta la tecla `L`. Dependiendo del nodo que hayas elegido, verás algo como en la siguiente imagen. Si te fijas con cuidado hay nodos en negro que no están conectados con la mayoría del modelo. Estos nodos se crean por la forma en que trabaja 3D Zephyr y no son necesarios para nosotros. 
+
+<img src={blender3} style={{width: '70%', display: 'block', margin: '0 auto'}}/>
+
+Una manera sencilla de eliminarlos es mover lo seleccionado hacia alguno de los lados apretando primero la tecla `G` y después el botón izquierdo del mouse en otra posición. Una vez movido, verás una nube de puntos que se quedó donde estaba antes el modelo. Para elegir estos puntos aprieta la tecla `B` y selecciona con el botón izquierdo del mouse como en la imagen.
+
+<img src={blender4} style={{width: '70%', display: 'block', margin: '0 auto'}}/>
+
+Ya seleccionados los vértices eliminalos apretando primero `supr` y después elige _Vertices_ del menú. Por razones que no me quedan muy claras, yo tuve que repetir este proceso varias veces para poder eliminar todos los vértices.
+
+Regresa el modelo a su lugar original de la misma manera que lo alejaste, y vuelve al modo de Objeto como estaba al principio. 
+
+Los pasos anteriores nos permitieron eliminar algunos de los nodos extra, sin embargo tenemos que quitar bastantes más para reducir el tamaño del modelo. Para ello vamos a agregar un modificador que se llama _Decimate_ que se encuentra en las herramientas de la derecha, como se muestra en la imagen:
+
+<img src={blender5} style={{width: '70%', display: 'block', margin: '0 auto'}}/>
+
+Cuando agregas el modificador aparecen varios parámetros que lo controlan. _Ratio_ indica que tanto queremos reducir el modelo. En este caso 1 significa el 100% de las caras originales. Hay un contador de caras (_Faces_) que te permite saber que tanto quieres reducir el modelo. Yo utilicé un valor de aproximadamente 7000. Una vez que eliges los parámetros del modificador picas _Apply_. 
+
+Puedes exportar el modelo para ver el tamaño. Pica en _File -> Export -> Wavefront (.obj)_. En mi caso el nuevo archivo quedo en cerca de 700kb, una reducción del 86%.
+
+Podrías exportar directamente tu modelo a `.glb`, el formato ideal para web, desde Blender. Sin embargo 3D Zephyr creó un material para tu modelo que puede ocupar mucho espacio. En mi caso es un `.jpg` que pesa cerca de 10MB. Para evitar que Blender lo asocie a nuestro modelo debemos quitarlo del material del modelo. Para ver más claramente esto puedes pasar al mode de _Viewport Shading_ en la parte superior derecha de la pantalla con el explorador 3D (ver imagen). 
+
+<img src={blender6} style={{width: '70%', display: 'block', margin: '0 auto'}}/>
+
+Para quitar la imagen del material, elige primero el modelo en la escena. Después ve a la pestaña de materiales y quita el link del color base (_Base Color_).
+
+Si ahora vas a _File -> Export -> gltf 2.0_ obtendrás un archivo `.glb` que en mi caso resultó ser de 287kb, es decir una reducción de aproximadamente el 95%.
+
+Si tienes alguna duda, comentario, chiste, insulto original o buen albur escríbeme a a mi [correo](mailto:dario@dazu.ma).

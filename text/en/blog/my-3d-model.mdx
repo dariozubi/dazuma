@@ -1,0 +1,96 @@
+export const data = {
+	title: 'My 3D model',
+	date: '2020-06-21',
+	description: 'How to make your own 3D model'
+}
+
+import zephyr from '../../../images/blog/modelo/zephyr.jpg';
+import zephyr2 from '../../../images/blog/modelo/zephyr2.jpg';
+import zephyr3 from '../../../images/blog/modelo/zephyr3.jpg';
+import blender from '../../../images/blog/modelo/blender.jpg';
+import blender2 from '../../../images/blog/modelo/blender2.jpg';
+import blender3 from '../../../images/blog/modelo/blender3.jpg';
+import blender4 from '../../../images/blog/modelo/blender4.jpg';
+import blender5 from '../../../images/blog/modelo/blender5.jpg';
+import blender6 from '../../../images/blog/modelo/blender6.jpg';
+
+In my website's home, you can see a 3D model of myself. Not so long ago this required specialized software or a skilled 3D modeler to build, but nowadays, it is relatively simple to do with free software. In this post, I'll show you how I did mine.
+
+## Tools 
+
+There is a lot of ways you can achieve this, but the software I used was [3D Zephyr](https://www.3dflow.net/3df-zephyr-free/) for the basic model and [Blender](https://www.blender.org/) for the edits to reduce the size. Both are completely free.
+
+## 3D Zephyr
+
+This tool is focused on projects using photogrammetry, which is a big word for "creating 3D models from photos or video". The free version of this software only allows you to use 50 photos. So take 50 photos of your model from all possible angles. The idea is that the program is going to stitch them in the end so try to cover all the surfaces of the model. Ideally, you need a plain background but as long as the model is framed well enough the result can be pretty good.
+
+When you open the software you are going to see somthing like this:
+
+<img src={zephyr} style={{width: '70%', display: 'block', margin: '0 auto'}}/>
+
+To build your model click on _Workflow -> New Project_. This will lead you to a wizard that will guide you in the process:
+- The first step asks you if you want to create your 3D model. Check the box for it.
+- The second step is to import your photos or video. I used the 50 allowed photos.
+- The third step shows you some details of the photos you imported.
+- After that, you'll be asked about the configuration for the camera, the point cloud, and the surface reconstruction. The default options work fine but you can change them to check the differences.
+- The last screen will show you which photos it used. After clicking _Finish_ you should see your model in a 3D environment. To move use the left mouse button to move the camera angle and the middle button (scroll) to move it one side to the other.
+
+<img src={zephyr2} style={{width: '70%', display: 'block', margin: '0 auto'}}/>
+
+If you had a result like mine, you'll see some things that shouldn't be there. In my case is the sort of hat on top of my head. 3D Zephyr has some tools that allow you to clean the model. Click in _Tools -> Selection -> Manual selection_. This will open a tool that allows you to select some parts of the model that you can later remove. To change between moving and selecting, click the _Pause/Resume_ button. There are many selection methods on the top that you can choose. The _Poly_ worked well for me because it allows you to select based on a polygon you create. Keep in mind that you are in a 3D environment and so the selection you make is going to be for all the vertices behind. Once selected, you can remove parts with the _Supr_ button. Try to move the camera before deleting to avoid deleting stuff you don't want and if you do click `ctrl+Z`.
+
+<img src={zephyr3} style={{width: '70%', display: 'block', margin: '0 auto'}}/>
+
+Once you have the model cleaned you have to create a textured mesh. To do that go to _Workflow -> Textured Mesh Generation_. This will open another wizard. You can choose the default options.
+
+Now your model is ready for export. Click on _Export -> Export Textured Mesh..._ and select _obj/mtl_. We will use this model in Blender to reduce the size.
+
+If you want to know in detail the things 3D Zephyr can do, go see its [manual](http://3dflow.net/zephyr-doc/3DF%20Zephyr%20Manual%204.500%20English.pdf). 
+
+## Blender
+
+Depending on the parameters you chose on 3D Zephyr, the final model can be large. In my case, it was of about 5000kb. For a website that's too much. You can make edits to the model on any of the 3D model software out there, but Blender is Open Source and free.
+
+Once you installed Blender, when you open it you should see something like this:
+
+<img src={blender} style={{width: '70%', display: 'block', margin: '0 auto'}}/>
+
+To move in Blender, use the middle button (scroll) to move the camera angle (like the left button on 3D Zephyr) and click `shift` and the scroll to move side to side.
+
+Delete the default cube on the scene by selecting it with the left mouse button, pushing `supr`, and then clicking on _Delete_. Then, import the model clicking in _File -> Import -> Wavefront(.obj)_. Search for the model we did before and add it. You'll notice that it is not in the same orientation. Push the `R` key and move it with the mouse to fix it.
+
+Now, change to _Edit mode_ as it shows on the image. You'll know you are there because you'll see nodes instead of faces of the model.
+
+<img src={blender2} style={{width: '70%', display: 'block', margin: '0 auto'}}/>
+
+Choose one of the models and press the `L` key. Depending on which node you chose, you'll see something like the image. You'll see some black nodes that are not connected to the main model. These were created on 3D Zephyr and we don't need them.
+
+<img src={blender3} style={{width: '70%', display: 'block', margin: '0 auto'}}/>
+
+A simple way to remove them is by first moving the selected nodes by pressing the `G` key. You'll see a cloud of black points where the model used to be. Select them by pressing the `B` key and then the left mouse button around them (see the image).
+
+<img src={blender4} style={{width: '70%', display: 'block', margin: '0 auto'}}/>
+
+Once selected, remove the vertices by clicking the `supr` key and then choosing _Vertices_ from the menu. I'm not sure why, but I had to do this last step several times to delete all vertices.
+
+Return the model to its original place and return to _Object mode_.
+
+All these steps, allowed us to remove some extra nodes but we have to remove a lot more to reduce the size of the file. To do that, we are going to add a modifier called _Decimate_ that is on the tools on the right of the screen:
+
+<img src={blender5} style={{width: '70%', display: 'block', margin: '0 auto'}}/>
+
+Once you add the modifier you'll see some parameters that control it. _Ratio_ indicates how much we want to reduce the model. In this case, 1 means 100% of the original faces. There is a _Faces_ counter that you can use to know how much you want to reduce the model. I left it around 7000. Once you choose the parameters, click _Apply_. 
+
+You can export it to see a new size. This is done by clicking on _File -> Export -> Wavefront (.obj)_. In my case, it was of 700kb, about 86% reduction.
+
+You could export your model to `.glb`, the ideal format for the web, from Blender. Yet, 3D Zephyr may have created a material for your model that can be very large. In my case, this is a `.jpg` file that is larger than 10MB. To remove it, you have to unlink it from the material of the model. To see more if this is the case, use the  _Viewport Shading_ on the top right of the 3D explorer screen (see image).
+
+<img src={blender6} style={{width: '70%', display: 'block', margin: '0 auto'}}/>
+
+To remove the image from the material, choose the model in the scene. Click on the material tab and unlink the image from the _Base color_.
+
+If you now click on _File -> Export -> gltf 2.0_ you'll get a small `.glb` file. In my case it was of 287kb, a 95% reduction.
+
+English is not my first language so I apologize for any mistake in the text. Doubts? Comments? Jokes? Insults? Write me an [email](mailto:dario@dazu.ma).
+
+(This post is also in [Spanish.](/blog/modelo-3d))
