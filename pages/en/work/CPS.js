@@ -55,7 +55,7 @@ function Text(){
 
         <Grow in={fade} timeout={800}>
           <Typography variant="h4" component="h1" gutterBottom>
-            Desarrollo de software para CPS
+            Software Development for CPS
           </Typography>
         </Grow>
         
@@ -86,8 +86,8 @@ function Text(){
 export default function CPS() {
 	return (
 		<Layout
-      title="Software para CPS con MEL"
-      description="Desarrollo de software para Centricity Practice Solution con MEL"
+      title="Software development for CPS"
+      description="Software Development for Centricity Practice Solution with MEL"
     >
       <Text/>
 		</Layout>
