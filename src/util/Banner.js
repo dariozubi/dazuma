@@ -67,7 +67,7 @@ export default function Banner({ language }){
       </List>
       <Divider/>
       <Box ml={5} mt={3}>
-        <IconButton color="inherit" href="mailto:dario@dazu.ma" target="_blank" rel="noopener">
+        <IconButton color="inherit" href="mailto:dario.zubillaga@opensea.io" target="_blank" rel="noopener">
           <MailOutlineIcon/>
         </IconButton>
         <IconButton color="inherit" href="https://github.com/dariozubi" target="_blank" rel="noopener">
