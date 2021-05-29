@@ -33,11 +33,15 @@
   </url>
 
   <url>
-    <loc>https://dazu.ma/en/work/argax</loc>
+    <loc>https://dazu.ma/en/work/CPS</loc>
   </url>
 
   <url>
-    <loc>https://dazu.ma/en/work/CPS</loc>
+    <loc>https://dazu.ma/en/work/SUMO</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/en/work/argax</loc>
   </url>
 
   <url>
@@ -85,19 +89,19 @@
   </url>
 
   <url>
-    <loc>https://dazu.ma/en/work/SUMO</loc>
-  </url>
-
-  <url>
     <loc>https://dazu.ma/en/work/unifin</loc>
   </url>
 
   <url>
-    <loc>https://dazu.ma/es/trabajo/argax</loc>
+    <loc>https://dazu.ma/es/trabajo/CPS</loc>
   </url>
 
   <url>
-    <loc>https://dazu.ma/es/trabajo/CPS</loc>
+    <loc>https://dazu.ma/es/trabajo/SUMO</loc>
+  </url>
+
+  <url>
+    <loc>https://dazu.ma/es/trabajo/argax</loc>
   </url>
 
   <url>
@@ -142,10 +146,6 @@
 
   <url>
     <loc>https://dazu.ma/es/trabajo/porsche</loc>
-  </url>
-
-  <url>
-    <loc>https://dazu.ma/es/trabajo/SUMO</loc>
   </url>
 
   <url>

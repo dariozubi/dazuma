@@ -40,8 +40,8 @@ export default function Banner({ language }){
           Darío Zubillaga
         </Box>
 
-        <Box my={3} textAlign="center" fontWeight="fontWeightLight" fontSize="h6.fontSize">
-          dario@dazu.ma
+        <Box my={3} textAlign="center" fontWeight="fontWeightLight" fontSize="1em">
+          dario.zubillaga@opensea.io
         </Box>
       
       <Divider/>
