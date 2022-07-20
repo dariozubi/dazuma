@@ -41,7 +41,7 @@ export default function Banner({ language }){
         </Box>
 
         <Box my={3} textAlign="center" fontWeight="fontWeightLight" fontSize="1em">
-          dario.zubillaga@opensea.io
+          dario@dazu.ma
         </Box>
       
       <Divider/>
